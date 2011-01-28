@@ -36,8 +36,8 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 		Plugin MinecartMania = server.getPluginManager().getPlugin("Minecart Mania Core");
 		
 		if (MinecartMania == null) {
-			log.severe("Minecart Mania Station requires Minecart Mania Core to function!");
-			log.severe("Minecart Mania Station is disabled!");
+			log.severe("Minecart Mania Sign Commands requires Minecart Mania Core to function!");
+			log.severe("Minecart Mania Sign Commands is disabled!");
 			this.setEnabled(false);
 		}
 		else {

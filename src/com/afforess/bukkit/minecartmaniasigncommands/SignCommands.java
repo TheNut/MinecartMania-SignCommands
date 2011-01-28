@@ -9,18 +9,19 @@ import com.afforess.bukkit.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.bukkit.minecartmaniacore.MinecartUtils;
 import com.afforess.bukkit.minecartmaniacore.SignUtils;
+import com.afforess.bukkit.minecartmaniacore.StringUtils;
 
 public class SignCommands {
 
 	public static boolean doHoldSign(MinecartManiaMinecart minecart) {
-		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 1);
+		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
 		for (Sign sign : signList) {
 			for (int i = 0; i < 4; i++) {
 				String line = sign.getLine(i).toLowerCase();
 				if (line.indexOf("hold for") > -1) {
 					double d;
 					try {
-						d = Double.valueOf(SignUtils.getNumber(line));
+						d = Double.valueOf(StringUtils.getNumber(line));
 					}
 					catch (NumberFormatException e) {
 						d = 0;

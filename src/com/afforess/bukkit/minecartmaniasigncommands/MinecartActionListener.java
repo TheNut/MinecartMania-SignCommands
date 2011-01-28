@@ -61,7 +61,6 @@ public class MinecartActionListener extends MinecartManiaListener{
 			
 			if (time == 0) {
 				minecart.minecart.setVelocity(motion);
-				System.out.println("Launching Cart" + motion.toString());
 				minecart.setDataValue("hold sign data", null);
 				minecart.setDataValue("Completed Hold Sign", Boolean.TRUE);
 			}
