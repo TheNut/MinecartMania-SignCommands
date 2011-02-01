@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MinecartManiaSignCommands extends JavaPlugin{
 	
+
 	public MinecartManiaSignCommands(PluginLoader pluginLoader,
 			Server instance, PluginDescriptionFile desc, File folder,
 			File plugin, ClassLoader cLoader) {
