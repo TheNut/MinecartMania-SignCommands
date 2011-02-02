@@ -2,14 +2,19 @@ package com.afforess.bukkit.minecartmaniasigncommands;
 
 import java.util.ArrayList;
 
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
 
 import com.afforess.bukkit.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.bukkit.minecartmaniacore.event.MinecartActionEvent;
+import com.afforess.bukkit.minecartmaniacore.event.MinecartLaunchedEvent;
 import com.afforess.bukkit.minecartmaniacore.event.MinecartManiaListener;
 import com.afforess.bukkit.minecartmaniacore.event.MinecartTimeEvent;
+import com.afforess.bukkit.minecartmaniasigncommands.sensor.Sensor;
+import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorManager;
+import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorUtils;
 
 public class MinecartActionListener extends MinecartManiaListener{
 
@@ -26,6 +31,33 @@ public class MinecartActionListener extends MinecartManiaListener{
 		}
 		
 		event.setActionTaken(action);
+		
+		//Activate new sensors
+		for (Block block : minecart.getParallelBlocks()) {
+			Sensor s = SensorManager.getSensor(block.getLocation().toVector());
+			if (s == null){
+				//Activate disable sensors
+				if (block.getState() instanceof Sign) {
+					if (SensorUtils.isInActiveSensor((Sign)block.getState())) {
+						SensorUtils.activateSensor((Sign)block.getState());
+						s = SensorManager.getSensor(block.getLocation().toVector());
+					}
+				}
+			}
+			if (s != null) {
+				s.input(minecart);
+			}
+			
+		}
+		
+		//deactivate old sensors
+		for (Block block : minecart.getPreviousLocationParallelBlocks()) {
+			Sensor s = SensorManager.getSensor(block.getLocation().toVector());
+			if (s != null){
+				s.input(minecart);
+			}
+		}
+		
 		//Allow catcher blocks to work again
 		if (minecart.getDataValue("Completed Hold Sign") != null) {
 			minecart.setDataValue("Completed Hold Sign", null);
@@ -74,5 +106,13 @@ public class MinecartActionListener extends MinecartManiaListener{
 			}
 			
 		}
+	}
+	
+	public void onMinecartLaunchedEvent(MinecartLaunchedEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
+		
+		
 	}
 }

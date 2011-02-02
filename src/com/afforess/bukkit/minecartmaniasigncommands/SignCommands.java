@@ -10,6 +10,7 @@ import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.bukkit.minecartmaniacore.MinecartUtils;
 import com.afforess.bukkit.minecartmaniacore.SignUtils;
 import com.afforess.bukkit.minecartmaniacore.StringUtils;
+import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorType;
 
 public class SignCommands {
 
@@ -107,7 +108,20 @@ public class SignCommands {
 		}
 		return false;
 	}
-
-
-
+	public static boolean isRedstoneSensorSign(Sign sign) {
+		return getRedstoneSensorSign(sign) != null;
+	}
+	
+	public static SensorType.Type getRedstoneSensorSign(Sign sign) {
+		//is a sensor sign
+		if (sign.getLine(0).toLowerCase().contains("sensor")) {
+			for (SensorType.Type sensor : SensorType.Type.values()) {
+				if (sign.getLine(1).contains(sensor.getType())) {
+					return sensor;
+				}
+			}
+		}
+		
+		return null;
+	}
 }

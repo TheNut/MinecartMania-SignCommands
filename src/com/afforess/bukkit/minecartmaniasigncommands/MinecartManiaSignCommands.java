@@ -27,6 +27,8 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 	public static Server server;
 	public static PluginDescriptionFile description;
 	public static MinecartActionListener listener = new MinecartActionListener();
+	public static SignCommandsPlayerListener playerListener = new SignCommandsPlayerListener();
+	public static SignCommandsBlockListener blockListener = new SignCommandsBlockListener();
 
 	public void onDisable() {
 		// TODO Auto-generated method stub
@@ -43,6 +45,8 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 		}
 		else {
 	        getServer().getPluginManager().registerEvent(Event.Type.CUSTOM_EVENT, listener, Priority.High, this);
+	        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_ITEM, playerListener, Priority.Normal, this);
+	        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
 	        
 	        PluginDescriptionFile pdfFile = this.getDescription();
 	        log.info( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
