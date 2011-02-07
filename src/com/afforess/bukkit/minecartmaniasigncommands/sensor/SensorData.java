@@ -75,18 +75,18 @@ public abstract class SensorData implements Sensor{
 		SensorManager.delSensor(sensor.getBlock().getLocation().toVector());
 		
 		if (sensor.getBlock().getType().getId() == Material.WALL_SIGN.getId()) {
-			MinecartManiaWorld.setBlockAt(Material.AIR.getId(), sensor.getX(), sensor.getY(), sensor.getZ());
-			MinecartManiaWorld.getWorld().dropItemNaturally(sensor.getBlock().getLocation(), new ItemStack(Material.SIGN_POST.getId(), 1));
+			MinecartManiaWorld.setBlockAt(sensor.getWorld(), Material.AIR.getId(), sensor.getX(), sensor.getY(), sensor.getZ());
+			sensor.getWorld().dropItemNaturally(sensor.getBlock().getLocation(), new ItemStack(Material.SIGN.getId(), 1));
 		}
 		
 		if (center.getType().getId() == Material.WOOD.getId()) {
-			MinecartManiaWorld.setBlockAt(Material.AIR.getId(), center.getX(), center.getY(), center.getZ());
-			MinecartManiaWorld.getWorld().dropItemNaturally(center.getLocation(), new ItemStack(Material.WOOD.getId(), 1));
+			MinecartManiaWorld.setBlockAt(sensor.getWorld(), Material.AIR.getId(), center.getX(), center.getY(), center.getZ());
+			sensor.getWorld().dropItemNaturally(center.getLocation(), new ItemStack(Material.WOOD.getId(), 1));
 		}
 		
 		if (lever.getType().getId() == Material.LEVER.getId()) {
-			MinecartManiaWorld.setBlockAt(Material.AIR.getId(), lever.getX(), lever.getY(), lever.getZ());
-			MinecartManiaWorld.getWorld().dropItemNaturally(lever.getLocation(), new ItemStack(Material.LEVER.getId(), 1));
+			MinecartManiaWorld.setBlockAt(sensor.getWorld(), Material.AIR.getId(), lever.getX(), lever.getY(), lever.getZ());
+			sensor.getWorld().dropItemNaturally(lever.getLocation(), new ItemStack(Material.LEVER.getId(), 1));
 		}
 	}
 }

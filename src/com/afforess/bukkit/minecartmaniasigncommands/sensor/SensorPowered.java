@@ -16,6 +16,6 @@ public class SensorPowered extends SensorData{
 
 	public void input(MinecartManiaMinecart minecart) {
 		setState(minecart.getParallelBlocks().contains(this.sensor.getBlock()) && minecart.isPoweredBeneath());
-		MinecartManiaWorld.setBlockPowered(lever.getX(), lever.getY(), lever.getZ(), getState());
+		MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), getState());
 	}
 }

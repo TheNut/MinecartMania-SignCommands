@@ -79,22 +79,22 @@ public class SignCommands {
 		if (isElevatorSign(sign)) {
 			for (int i = 0; i < 128; i++) {
 				if (i != sign.getY()) {
-					ArrayList<Sign> signList = SignUtils.getParallelSignList(sign.getX(), i, sign.getZ());
+					ArrayList<Sign> signList = SignUtils.getParallelSignList(sign.getWorld(), sign.getX(), i, sign.getZ());
 					for (Sign elevator : signList) {
 						if (isElevatorSign(elevator)) {
 							
 							Location nextFloor = null;
-							if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getX() - 1, i, elevator.getZ()))) {
-								nextFloor = new Location(MinecartManiaWorld.getWorld(), elevator.getX() - 1, i, elevator.getZ());
+							if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ()))) {
+								nextFloor = new Location(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ());
 							}
-							else if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getX() + 1, i, elevator.getZ()))) {
-								nextFloor = new Location(MinecartManiaWorld.getWorld(), elevator.getX() + 1, i, elevator.getZ());
+							else if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getWorld(), elevator.getX() + 1, i, elevator.getZ()))) {
+								nextFloor = new Location(elevator.getWorld(), elevator.getX() + 1, i, elevator.getZ());
 							}
-							else if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getX(), i, elevator.getZ() - 1))) {
-								nextFloor = new Location(MinecartManiaWorld.getWorld(), elevator.getX(), i, elevator.getZ() - 1);
+							else if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() - 1))) {
+								nextFloor = new Location(elevator.getWorld(), elevator.getX(), i, elevator.getZ() - 1);
 							}
-							else if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getX(), i, elevator.getZ() + 1))) {
-								nextFloor = new Location(MinecartManiaWorld.getWorld(), elevator.getX(), i, elevator.getZ() + 1);
+							else if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() + 1))) {
+								nextFloor = new Location(elevator.getWorld(), elevator.getX(), i, elevator.getZ() + 1);
 							}
 							if (nextFloor != null) {
 								

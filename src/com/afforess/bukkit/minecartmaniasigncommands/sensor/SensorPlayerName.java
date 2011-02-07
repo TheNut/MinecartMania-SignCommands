@@ -26,6 +26,6 @@ public class SensorPlayerName extends SensorData{
 			
 		}
 		
-		MinecartManiaWorld.setBlockPowered(lever.getX(), lever.getY(), lever.getZ(), getState());
+		MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), getState());
 	}
 }

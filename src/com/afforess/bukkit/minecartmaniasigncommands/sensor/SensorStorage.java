@@ -16,7 +16,7 @@ public class SensorStorage extends SensorData{
 
 	public void input(MinecartManiaMinecart minecart) {
 		setState(minecart.getParallelBlocks().contains(this.sensor.getBlock()) && minecart.isStorageMinecart());
-		MinecartManiaWorld.setBlockPowered(lever.getX(), lever.getY(), lever.getZ(), getState());
+		MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), getState());
 	}
 
 }

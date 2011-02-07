@@ -7,7 +7,6 @@ import org.bukkit.util.Vector;
 
 import com.afforess.bukkit.minecartmaniacore.DirectionUtils;
 import com.afforess.bukkit.minecartmaniacore.DirectionUtils.CompassDirection;
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.bukkit.minecartmaniacore.StringUtils;
 import com.afforess.bukkit.minecartmaniasigncommands.SignCommands;
 import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorType.Type;
@@ -122,7 +121,6 @@ public class SensorUtils {
 		sign.getBlock().setData((byte) signData);
 		
 		//update the sign
-		sign = (Sign)MinecartManiaWorld.getBlockAt(sign.getX(), sign.getY(), sign.getZ()).getState();
 		sign.setLine(0, "[Sensor]");
 		sign.setLine(1, "[" + type.getType() + "]");
 		
