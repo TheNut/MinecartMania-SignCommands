@@ -1,4 +1,4 @@
-package com.afforess.bukkit.minecartmaniasigncommands;
+package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
 
@@ -12,9 +12,9 @@ import com.afforess.bukkit.minecartmaniacore.event.MinecartActionEvent;
 import com.afforess.bukkit.minecartmaniacore.event.MinecartLaunchedEvent;
 import com.afforess.bukkit.minecartmaniacore.event.MinecartManiaListener;
 import com.afforess.bukkit.minecartmaniacore.event.MinecartTimeEvent;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.Sensor;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorManager;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorUtils;
+import com.afforess.minecartmaniasigncommands.sensor.Sensor;
+import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
+import com.afforess.minecartmaniasigncommands.sensor.SensorUtils;
 
 public class MinecartActionListener extends MinecartManiaListener{
 

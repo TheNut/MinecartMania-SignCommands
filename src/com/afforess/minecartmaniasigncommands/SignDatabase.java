@@ -1,4 +1,4 @@
-package com.afforess.bukkit.minecartmaniasigncommands;
+package com.afforess.minecartmaniasigncommands;
 
 import java.io.File;
 import java.sql.*;

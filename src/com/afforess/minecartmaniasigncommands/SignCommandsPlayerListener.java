@@ -1,4 +1,4 @@
-package com.afforess.bukkit.minecartmaniasigncommands;
+package com.afforess.minecartmaniasigncommands;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -9,8 +9,8 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.afforess.bukkit.minecartmaniacore.ChatUtils;
 import com.afforess.bukkit.minecartmaniacore.DirectionUtils;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorType;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorUtils;
+import com.afforess.minecartmaniasigncommands.sensor.SensorType;
+import com.afforess.minecartmaniasigncommands.sensor.SensorUtils;
 
 public class SignCommandsPlayerListener extends PlayerListener{
 	

@@ -1,4 +1,4 @@
-package com.afforess.bukkit.minecartmaniasigncommands.sensor;
+package com.afforess.minecartmaniasigncommands.sensor;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -8,8 +8,8 @@ import org.bukkit.util.Vector;
 import com.afforess.bukkit.minecartmaniacore.DirectionUtils;
 import com.afforess.bukkit.minecartmaniacore.DirectionUtils.CompassDirection;
 import com.afforess.bukkit.minecartmaniacore.StringUtils;
-import com.afforess.bukkit.minecartmaniasigncommands.SignCommands;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorType.Type;
+import com.afforess.minecartmaniasigncommands.SignCommands;
+import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
 public class SensorUtils {
 	

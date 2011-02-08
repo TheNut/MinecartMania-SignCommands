@@ -1,4 +1,4 @@
-package com.afforess.bukkit.minecartmaniasigncommands.sensor;
+package com.afforess.minecartmaniasigncommands.sensor;
 
 import org.bukkit.block.Block;
 

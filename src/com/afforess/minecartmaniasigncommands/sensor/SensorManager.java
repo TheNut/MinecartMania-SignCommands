@@ -1,11 +1,12 @@
-package com.afforess.bukkit.minecartmaniasigncommands.sensor;
+package com.afforess.minecartmaniasigncommands.sensor;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorType.Type;
+
+import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
 public class SensorManager {
 	private static final ConcurrentHashMap<Vector, Sensor> sensors = new ConcurrentHashMap<Vector, Sensor>();

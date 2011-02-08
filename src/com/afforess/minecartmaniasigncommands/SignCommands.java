@@ -1,4 +1,4 @@
-package com.afforess.bukkit.minecartmaniasigncommands;
+package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.bukkit.minecartmaniacore.MinecartUtils;
 import com.afforess.bukkit.minecartmaniacore.SignUtils;
 import com.afforess.bukkit.minecartmaniacore.StringUtils;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorType;
+import com.afforess.minecartmaniasigncommands.sensor.SensorType;
 
 public class SignCommands {
 

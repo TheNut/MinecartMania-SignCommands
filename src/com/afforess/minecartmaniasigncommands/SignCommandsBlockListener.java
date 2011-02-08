@@ -1,4 +1,4 @@
-package com.afforess.bukkit.minecartmaniasigncommands;
+package com.afforess.minecartmaniasigncommands;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -11,9 +11,9 @@ import org.bukkit.event.block.BlockListener;
 import org.bukkit.util.Vector;
 
 import com.afforess.bukkit.minecartmaniacore.ChatUtils;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.Sensor;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorData;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorManager;
+import com.afforess.minecartmaniasigncommands.sensor.Sensor;
+import com.afforess.minecartmaniasigncommands.sensor.SensorData;
+import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
 
 public class SignCommandsBlockListener extends BlockListener{
     public void onBlockDamage(BlockDamageEvent event) {

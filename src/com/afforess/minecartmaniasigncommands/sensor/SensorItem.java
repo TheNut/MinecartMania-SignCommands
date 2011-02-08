@@ -1,11 +1,11 @@
-package com.afforess.bukkit.minecartmaniasigncommands.sensor;
+package com.afforess.minecartmaniasigncommands.sensor;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import com.afforess.bukkit.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorType.Type;
+import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
 public class SensorItem extends SensorData{
 

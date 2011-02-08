@@ -1,21 +1,22 @@
-package com.afforess.bukkit.minecartmaniasigncommands.sensor;
+package com.afforess.minecartmaniasigncommands.sensor;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Monster;
 
 import com.afforess.bukkit.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
-import com.afforess.bukkit.minecartmaniasigncommands.sensor.SensorType.Type;
+import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
-public class SensorPlayer extends SensorData{
+public class SensorMob extends SensorData{
 
-	public SensorPlayer(Type type, Sign sign, Block center, Block lever) {
+	public SensorMob(Type type, Sign sign, Block center, Block lever) {
 		super(type, sign, center, lever);
 		// TODO Auto-generated constructor stub
 	}
 
 	public void input(MinecartManiaMinecart minecart) {
-		setState(minecart.getParallelBlocks().contains(this.sensor.getBlock()) && minecart.hasPlayerPassenger());
+		setState(minecart.getParallelBlocks().contains(this.sensor.getBlock()) && minecart.minecart.getPassenger() instanceof Monster);
 		MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), getState());
 	}
 }
