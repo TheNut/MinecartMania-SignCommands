@@ -1,3 +1,4 @@
 name: Minecart Mania Sign Commands
-main: com.afforess.bukkit.minecartmaniasigncommands.MinecartManiaSignCommands
+main: com.afforess.minecartmaniasigncommands.MinecartManiaSignCommands
 version: 0.14
+author: Afforess
