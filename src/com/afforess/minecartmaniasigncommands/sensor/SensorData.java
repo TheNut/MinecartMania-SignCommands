@@ -5,7 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
+import com.afforess.minecartmaniacore.MinecartManiaWorld;
 
 public abstract class SensorData implements Sensor{
 	private SensorType.Type type = null;

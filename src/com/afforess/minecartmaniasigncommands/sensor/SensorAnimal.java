@@ -4,8 +4,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Animals;
 
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
+import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
 public class SensorAnimal extends SensorData{
@@ -16,6 +16,10 @@ public class SensorAnimal extends SensorData{
 	}
 
 	public void input(MinecartManiaMinecart minecart) {
+		if (minecart == null) {
+			setState(false);
+			return;
+		}
 		setState(minecart.getParallelBlocks().contains(this.sensor.getBlock()) && minecart.minecart.getPassenger() instanceof Animals);
 		MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), getState());
 	}

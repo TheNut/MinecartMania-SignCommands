@@ -7,8 +7,8 @@ import org.bukkit.event.player.PlayerListener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.afforess.bukkit.minecartmaniacore.ChatUtils;
-import com.afforess.bukkit.minecartmaniacore.DirectionUtils;
+import com.afforess.minecartmaniacore.ChatUtils;
+import com.afforess.minecartmaniacore.DirectionUtils;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType;
 import com.afforess.minecartmaniasigncommands.sensor.SensorUtils;
 

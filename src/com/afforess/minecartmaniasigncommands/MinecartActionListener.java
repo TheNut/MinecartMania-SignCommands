@@ -2,19 +2,15 @@ package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
 
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
 
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
-import com.afforess.bukkit.minecartmaniacore.event.MinecartActionEvent;
-import com.afforess.bukkit.minecartmaniacore.event.MinecartLaunchedEvent;
-import com.afforess.bukkit.minecartmaniacore.event.MinecartManiaListener;
-import com.afforess.bukkit.minecartmaniacore.event.MinecartTimeEvent;
-import com.afforess.minecartmaniasigncommands.sensor.Sensor;
-import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
-import com.afforess.minecartmaniasigncommands.sensor.SensorUtils;
+import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.MinecartManiaWorld;
+import com.afforess.minecartmaniacore.event.MinecartActionEvent;
+import com.afforess.minecartmaniacore.event.MinecartManiaListener;
+import com.afforess.minecartmaniacore.event.MinecartManiaMinecartDestroyedEvent;
+import com.afforess.minecartmaniacore.event.MinecartTimeEvent;
 
 public class MinecartActionListener extends MinecartManiaListener{
 
@@ -29,34 +25,16 @@ public class MinecartActionListener extends MinecartManiaListener{
 			Sign sign = (Sign)minecart.getBlockTypeAhead().getState();
 			action = SignCommands.doElevatorSign(minecart, sign);
 		}
+		if (!action) {
+			action = SignCommands.doAnnouncementSign(minecart);
+		}
+		if (!action) {
+			action = SignCommands.doStopAtDestination(minecart);
+		}
 		
 		event.setActionTaken(action);
 		
-		//Activate new sensors
-		for (Block block : minecart.getParallelBlocks()) {
-			Sensor s = SensorManager.getSensor(block.getLocation().toVector());
-			if (s == null){
-				//Activate disable sensors
-				if (block.getState() instanceof Sign) {
-					if (SensorUtils.isInActiveSensor((Sign)block.getState())) {
-						SensorUtils.activateSensor((Sign)block.getState());
-						s = SensorManager.getSensor(block.getLocation().toVector());
-					}
-				}
-			}
-			if (s != null) {
-				s.input(minecart);
-			}
-			
-		}
-		
-		//deactivate old sensors
-		for (Block block : minecart.getPreviousLocationParallelBlocks()) {
-			Sensor s = SensorManager.getSensor(block.getLocation().toVector());
-			if (s != null){
-				s.input(minecart);
-			}
-		}
+		SignCommands.updateSensors(minecart);
 		
 		//Allow catcher blocks to work again
 		if (minecart.getDataValue("Completed Hold Sign") != null) {
@@ -108,11 +86,8 @@ public class MinecartActionListener extends MinecartManiaListener{
 		}
 	}
 	
-	public void onMinecartLaunchedEvent(MinecartLaunchedEvent event) {
-		if (event.isCancelled()) {
-			return;
-		}
-		
+	public void onMinecartManiaMinecartDestroyedEvent(MinecartManiaMinecartDestroyedEvent event) {
+		SignCommands.updateSensors(event.getMinecart(), null);
 		
 	}
 }

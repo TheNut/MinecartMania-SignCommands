@@ -3,8 +3,8 @@ package com.afforess.minecartmaniasigncommands;
 import java.io.File;
 import java.sql.*;
 
-import com.afforess.bukkit.minecartmaniacore.Debug;
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaCore;
+import com.afforess.minecartmaniacore.Debug;
+import com.afforess.minecartmaniacore.MinecartManiaCore;
 
 public abstract class SignDatabase {
 	

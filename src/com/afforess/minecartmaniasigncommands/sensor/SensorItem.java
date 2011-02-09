@@ -3,8 +3,8 @@ package com.afforess.minecartmaniasigncommands.sensor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
+import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
 public class SensorItem extends SensorData{
@@ -16,6 +16,10 @@ public class SensorItem extends SensorData{
 	}
 
 	public void input(MinecartManiaMinecart minecart) {
+		if (minecart == null) {
+			setState(false);
+			return;
+		}
 		setState(false);
 		if (minecart.getParallelBlocks().contains(this.sensor.getBlock())) {
 			if (minecart.isStorageMinecart()) {

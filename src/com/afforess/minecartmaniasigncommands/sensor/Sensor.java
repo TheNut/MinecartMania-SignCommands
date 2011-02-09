@@ -2,7 +2,7 @@ package com.afforess.minecartmaniasigncommands.sensor;
 
 import org.bukkit.block.Block;
 
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 
 public interface Sensor {
 

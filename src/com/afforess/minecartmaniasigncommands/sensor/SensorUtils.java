@@ -5,9 +5,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
 
-import com.afforess.bukkit.minecartmaniacore.DirectionUtils;
-import com.afforess.bukkit.minecartmaniacore.DirectionUtils.CompassDirection;
-import com.afforess.bukkit.minecartmaniacore.StringUtils;
+import com.afforess.minecartmaniacore.DirectionUtils;
+import com.afforess.minecartmaniacore.DirectionUtils.CompassDirection;
+import com.afforess.minecartmaniacore.StringUtils;
 import com.afforess.minecartmaniasigncommands.SignCommands;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
@@ -121,8 +121,9 @@ public class SensorUtils {
 		sign.getBlock().setData((byte) signData);
 		
 		//update the sign
-		sign.setLine(0, "[Sensor]");
-		sign.setLine(1, "[" + type.getType() + "]");
+		Sign newSign = (Sign)sign.getWorld().getBlockAt(sign.getX(), sign.getY(), sign.getZ()).getState();
+		newSign.setLine(0, "[Sensor]");
+		newSign.setLine(1, "[" + type.getType() + "]");
 		
 		//check to see if the sign has special requirements (item - player name)
 		int itemId = -1;
@@ -132,24 +133,24 @@ public class SensorUtils {
 			if (lines[3].toLowerCase().contains("item")) {
 				String[] split = lines[3].split(":");
 				itemId = Integer.valueOf(StringUtils.getNumber(split[1]));
-				sensor = SensorManager.constructSensor(sign, sign.getBlock().getFace(back), sign.getBlock().getFace(back,2), type, itemId);
-				sign.setLine(2, "[Item: " + itemId + "]");
+				sensor = SensorManager.constructSensor(newSign, newSign.getBlock().getFace(back), newSign.getBlock().getFace(back,2), type, itemId);
+				newSign.setLine(2, "[Item: " + itemId + "]");
 			}
 		}
 		else if (type.equals(Type.DETECT_PLYR_NAME)) {
 			playerName = lines[3].trim();
-			sensor = SensorManager.constructSensor(sign, sign.getBlock().getFace(back), sign.getBlock().getFace(back,2), type, playerName);
-			sign.setLine(2, playerName);
+			sensor = SensorManager.constructSensor(newSign, newSign.getBlock().getFace(back), newSign.getBlock().getFace(back,2), type, playerName);
+			newSign.setLine(2, playerName);
 		}
 		else {
-			sensor = SensorManager.constructSensor(sign, sign.getBlock().getFace(back), sign.getBlock().getFace(back,2), type);
+			sensor = SensorManager.constructSensor(newSign, newSign.getBlock().getFace(back), newSign.getBlock().getFace(back,2), type);
 		}
 		if (sensor != null) {
-			SensorManager.addSensor(new Vector(sign.getX(), sign.getY(), sign.getZ()), sensor);
+			SensorManager.addSensor(new Vector(newSign.getX(), newSign.getY(), newSign.getZ()), sensor);
 		}
 		
-		sign.setLine(3, type.getDescription());
-		sign.update();
+		newSign.setLine(3, type.getDescription());
+		newSign.update();
 	}
 
 }

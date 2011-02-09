@@ -2,17 +2,87 @@ package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.bukkit.minecartmaniacore.MinecartManiaWorld;
-import com.afforess.bukkit.minecartmaniacore.MinecartUtils;
-import com.afforess.bukkit.minecartmaniacore.SignUtils;
-import com.afforess.bukkit.minecartmaniacore.StringUtils;
+import com.afforess.minecartmaniacore.ChatUtils;
+import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.MinecartManiaWorld;
+import com.afforess.minecartmaniacore.MinecartUtils;
+import com.afforess.minecartmaniacore.SignUtils;
+import com.afforess.minecartmaniacore.StringUtils;
+import com.afforess.minecartmaniasigncommands.sensor.Sensor;
+import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType;
+import com.afforess.minecartmaniasigncommands.sensor.SensorUtils;
 
 public class SignCommands {
+	
+	
+	public static boolean doStopAtDestination(MinecartManiaMinecart minecart) {
+		//Set by MMAC
+		if (minecart.getDataValue("stop at station") == null) {
+			return false;
+		}
+		
+		ArrayList<Sign> signList = SignUtils.getParallelSignList(minecart);
+		signList.addAll(SignUtils.getSignBeneathList(minecart, 2));
+		for (Sign sign : signList) {
+			if (sign.getLine(0).toLowerCase().contains("station stop")) {
+				sign.setLine(0, "[Station Stop]");
+				try {
+					Integer stop = new Integer(Integer.valueOf(StringUtils.getNumber(sign.getLine(1)))); 
+					sign.setLine(1, "["+stop.toString()+"]");
+					sign.update();
+					if (stop.intValue() == MinecartManiaWorld.getIntValue(minecart.getDataValue("stop at station"))) {
+						minecart.stopCart();
+						minecart.setDataValue("stop at station", null);
+						if (minecart.hasPlayerPassenger()) {
+							ChatUtils.sendMultilineMessage(minecart.getPlayerPassenger(), "You've arrived at your destination", ChatColor.GREEN.toString());
+						}
+						return true;
+					}
+				 }
+				 catch (NumberFormatException e) {
+					 return false;
+				 }
+			}
+		}
+		
+		return false;
+	}
+	
+	public static boolean doAnnouncementSign(MinecartManiaMinecart minecart) {
+		ArrayList<Sign> signList = SignUtils.getParallelSignList(minecart);
+		signList.addAll(SignUtils.getSignBeneathList(minecart, 2));
+		for (Sign sign : signList) {
+			if (sign.getLine(0).toLowerCase().contains("announce")) {
+				sign.setLine(0, "[Announce]");
+				if (minecart.hasPlayerPassenger()){
+					final String title = ChatColor.YELLOW + "[Announcement] " + ChatColor.WHITE;
+					String annoucement = title + sign.getLine(1);
+					//! signifies a new line, otherwise continue message on same line
+					if (sign.getLine(2).startsWith("!")) {
+						annoucement += " [NEWLINE] " + title + sign.getLine(2).substring(1);
+					}
+					else {
+						annoucement += sign.getLine(2);
+					}
+					
+					if (sign.getLine(3).startsWith("!")) {
+						annoucement += "[NEWLINE]" + title + sign.getLine(3).substring(1);
+					}
+					else {
+						annoucement += sign.getLine(3);
+					}
+					ChatUtils.sendMultilineMessage(minecart.getPlayerPassenger(), annoucement);
+				}
+			}
+		}
+		return false;
+	}
 
 	public static boolean doHoldSign(MinecartManiaMinecart minecart) {
 		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
@@ -124,4 +194,37 @@ public class SignCommands {
 		
 		return null;
 	}
+	
+	public static void updateSensors(MinecartManiaMinecart minecart, MinecartManiaMinecart input) {
+		//Activate new sensors
+		for (Block block : minecart.getParallelBlocks()) {
+			Sensor s = SensorManager.getSensor(block.getLocation().toVector());
+			if (s == null){
+				//Activate disable sensors
+				if (block.getState() instanceof Sign) {
+					if (SensorUtils.isInActiveSensor((Sign)block.getState())) {
+						SensorUtils.activateSensor((Sign)block.getState());
+						s = SensorManager.getSensor(block.getLocation().toVector());
+					}
+				}
+			}
+			if (s != null) {
+				s.input(input);
+			}
+			
+		}
+		
+		//deactivate old sensors
+		for (Block block : minecart.getPreviousLocationParallelBlocks()) {
+			Sensor s = SensorManager.getSensor(block.getLocation().toVector());
+			if (s != null){
+				s.input(input);
+			}
+		}
+	}
+	
+	public static void updateSensors(MinecartManiaMinecart minecart) {
+		updateSensors(minecart, minecart);
+	}
+		
 }

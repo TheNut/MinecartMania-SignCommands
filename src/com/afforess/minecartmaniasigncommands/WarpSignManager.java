@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
 
+@SuppressWarnings("unused")
 public class WarpSignManager {
 
 	/*public static void addWarpSign(Sign sign) {
