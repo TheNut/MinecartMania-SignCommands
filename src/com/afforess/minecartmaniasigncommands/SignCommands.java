@@ -58,6 +58,14 @@ public class SignCommands {
 		ArrayList<Sign> signList = SignUtils.getParallelSignList(minecart);
 		signList.addAll(SignUtils.getSignBeneathList(minecart, 2));
 		for (Sign sign : signList) {
+			
+			//Temporary CraftBook conversion start - will be removed before MMC 1.0
+			if (sign.getLine(0).equals("[Print]")) {
+				sign.setLine(0, "[Announce]");
+				sign.update();
+			}
+			//Temporary CraftBook conversion end
+			
 			if (sign.getLine(0).toLowerCase().contains("announce")) {
 				sign.setLine(0, "[Announce]");
 				if (minecart.hasPlayerPassenger()){
@@ -114,9 +122,6 @@ public class SignCommands {
 							}
 						}
 						sign.update();
-						
-						//Block normal catcher ability
-						minecart.setDataValue("Do Catcher Block", Boolean.FALSE);
 					}
 				}
 			}

@@ -35,18 +35,13 @@ public class MinecartActionListener extends MinecartManiaListener{
 		event.setActionTaken(action);
 		
 		SignCommands.updateSensors(minecart);
-		
-		//Allow catcher blocks to work again
-		if (minecart.getDataValue("Completed Hold Sign") != null) {
-			minecart.setDataValue("Completed Hold Sign", null);
-			minecart.setDataValue("Do Catcher Block", null);
-		}
 	}
 	
 	public void onMinecartTimeEvent(MinecartTimeEvent event) {
 		MinecartManiaMinecart minecart = event.getMinecart();
 		Object o = minecart.getDataValue("hold sign data");
 		if (o != null) {
+			//Retrieve hold sign data
 			@SuppressWarnings("unchecked")
 			ArrayList<Object> holdSignData = (ArrayList<Object>)o;
 			int time = ((Integer)holdSignData.get(0)).intValue();
@@ -72,9 +67,9 @@ public class MinecartActionListener extends MinecartManiaListener{
 			if (time == 0) {
 				minecart.minecart.setVelocity(motion);
 				minecart.setDataValue("hold sign data", null);
-				minecart.setDataValue("Completed Hold Sign", Boolean.TRUE);
 			}
 			else {
+				//Update data
 				ArrayList<Object> newHoldSignData = new ArrayList<Object>();
 				newHoldSignData.add(new Integer(time));
 				newHoldSignData.add(sign);
