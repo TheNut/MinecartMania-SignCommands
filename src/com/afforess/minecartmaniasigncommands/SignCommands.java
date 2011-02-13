@@ -80,7 +80,7 @@ public class SignCommands {
 					}
 					
 					if (sign.getLine(3).startsWith("!")) {
-						annoucement += "[NEWLINE]" + title + sign.getLine(3).substring(1);
+						annoucement += " [NEWLINE] " + title + sign.getLine(3).substring(1);
 					}
 					else {
 						annoucement += sign.getLine(3);
