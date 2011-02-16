@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.util.Vector;
 
-import com.afforess.minecartmaniacore.ChatUtils;
+import com.afforess.minecartmaniacore.utils.ChatUtils;
 import com.afforess.minecartmaniasigncommands.sensor.Sensor;
 import com.afforess.minecartmaniasigncommands.sensor.SensorData;
 import com.afforess.minecartmaniasigncommands.sensor.SensorManager;

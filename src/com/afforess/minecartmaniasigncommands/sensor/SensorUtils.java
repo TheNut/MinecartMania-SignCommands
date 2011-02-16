@@ -5,9 +5,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
 
-import com.afforess.minecartmaniacore.DirectionUtils;
-import com.afforess.minecartmaniacore.DirectionUtils.CompassDirection;
-import com.afforess.minecartmaniacore.StringUtils;
+import com.afforess.minecartmaniacore.utils.DirectionUtils;
+import com.afforess.minecartmaniacore.utils.DirectionUtils.CompassDirection;
+import com.afforess.minecartmaniacore.utils.StringUtils;
 import com.afforess.minecartmaniasigncommands.SignCommands;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 

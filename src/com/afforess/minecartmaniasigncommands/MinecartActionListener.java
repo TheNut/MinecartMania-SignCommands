@@ -8,6 +8,7 @@ import org.bukkit.util.Vector;
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.event.MinecartActionEvent;
+import com.afforess.minecartmaniacore.event.MinecartLaunchedEvent;
 import com.afforess.minecartmaniacore.event.MinecartManiaListener;
 import com.afforess.minecartmaniacore.event.MinecartManiaMinecartDestroyedEvent;
 import com.afforess.minecartmaniacore.event.MinecartTimeEvent;
@@ -29,12 +30,18 @@ public class MinecartActionListener extends MinecartManiaListener{
 			action = SignCommands.doAnnouncementSign(minecart);
 		}
 		if (!action) {
-			action = SignCommands.doStopAtDestination(minecart);
+			action = SignCommands.doEjectionSign(minecart);
 		}
 		
 		event.setActionTaken(action);
 		
 		SignCommands.updateSensors(minecart);
+	}
+	
+	public void onMinecartLaunchedEvent(MinecartLaunchedEvent event) {
+		if (event.getMinecart().getDataValue("hold sign data") != null) {
+			event.setCancelled(true);
+		}
 	}
 	
 	public void onMinecartTimeEvent(MinecartTimeEvent event) {

@@ -6,13 +6,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
 
-import com.afforess.minecartmaniacore.ChatUtils;
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
-import com.afforess.minecartmaniacore.MinecartUtils;
-import com.afforess.minecartmaniacore.SignUtils;
-import com.afforess.minecartmaniacore.StringUtils;
+import com.afforess.minecartmaniacore.utils.ChatUtils;
+import com.afforess.minecartmaniacore.utils.MinecartUtils;
+import com.afforess.minecartmaniacore.utils.SignUtils;
+import com.afforess.minecartmaniacore.utils.StringUtils;
 import com.afforess.minecartmaniasigncommands.sensor.Sensor;
 import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType;
@@ -21,33 +22,28 @@ import com.afforess.minecartmaniasigncommands.sensor.SensorUtils;
 public class SignCommands {
 	
 	
-	public static boolean doStopAtDestination(MinecartManiaMinecart minecart) {
-		//Set by MMAC
-		if (minecart.getDataValue("stop at station") == null) {
+	public static boolean doEjectionSign(MinecartManiaMinecart minecart) {
+		if (minecart.minecart.getPassenger() == null) {
 			return false;
 		}
-		
-		ArrayList<Sign> signList = SignUtils.getParallelSignList(minecart);
-		signList.addAll(SignUtils.getSignBeneathList(minecart, 2));
+		if (minecart.getBlockIdBeneath() != MinecartManiaWorld.getEjectorBlockId()) {
+			return false;
+		}
+		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 8);
 		for (Sign sign : signList) {
-			if (sign.getLine(0).toLowerCase().contains("station stop")) {
-				sign.setLine(0, "[Station Stop]");
-				try {
-					Integer stop = new Integer(Integer.valueOf(StringUtils.getNumber(sign.getLine(1)))); 
-					sign.setLine(1, "["+stop.toString()+"]");
+			for (int i = 0; i < 4; i++) {
+				String line = sign.getLine(i).toLowerCase();
+				if (line.contains("eject here")) {
+					sign.setLine(i, "[Eject Here]");
 					sign.update();
-					if (stop.intValue() == MinecartManiaWorld.getIntValue(minecart.getDataValue("stop at station"))) {
-						minecart.stopCart();
-						minecart.setDataValue("stop at station", null);
-						if (minecart.hasPlayerPassenger()) {
-							ChatUtils.sendMultilineMessage(minecart.getPlayerPassenger(), "You've arrived at your destination", ChatColor.GREEN.toString());
-						}
+					Location loc = PlayerUtils.getValidPlayerLocation(sign.getBlock());
+					if (loc != null) {
+						Entity passenger = minecart.minecart.getPassenger();
+						minecart.minecart.eject();
+						passenger.teleportTo(loc);
 						return true;
 					}
-				 }
-				 catch (NumberFormatException e) {
-					 return false;
-				 }
+				}
 			}
 		}
 		
