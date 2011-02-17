@@ -32,6 +32,9 @@ public class MinecartActionListener extends MinecartManiaListener{
 		if (!action) {
 			action = SignCommands.doEjectionSign(minecart);
 		}
+		if (!action) {
+			action = SignCommands.doStationSign(minecart);
+		}
 		
 		event.setActionTaken(action);
 		

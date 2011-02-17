@@ -9,6 +9,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.MinecartManiaPlayer;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.utils.ChatUtils;
 import com.afforess.minecartmaniacore.utils.MinecartUtils;
@@ -20,6 +21,34 @@ import com.afforess.minecartmaniasigncommands.sensor.SensorType;
 import com.afforess.minecartmaniasigncommands.sensor.SensorUtils;
 
 public class SignCommands {
+	
+	public static boolean doStationSign(MinecartManiaMinecart minecart) {
+		if (!minecart.hasPlayerPassenger()) {
+			return false;
+		}
+		ArrayList<Sign> signList = SignUtils.getParallelSignList(minecart);
+		signList.addAll(SignUtils.getSignBeneathList(minecart, 2));
+		for (Sign sign : signList) {
+			for (int i = 0; i < 4; i++) {
+				if (sign.getLine(i).toLowerCase().contains("station")) {
+					String val[] = sign.getLine(i).toLowerCase().split(":");
+					if (val.length != 2) {
+						continue;
+					}
+					val[1] = val[1].trim();
+					if (val[1].contains("]")) {
+						val[1] = val[1].substring(0, val[1].indexOf(']'));
+					}
+					MinecartManiaPlayer player = MinecartManiaWorld.getMinecartManiaPlayer(minecart.getPlayerPassenger());
+					player.setLastStation(val[1]);
+					sign.setLine(i, "[Station:" + val[1]+"]");
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 	
 	
 	public static boolean doEjectionSign(MinecartManiaMinecart minecart) {
