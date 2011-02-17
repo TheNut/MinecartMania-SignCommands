@@ -4,6 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
@@ -23,7 +24,9 @@ public class SensorItem extends SensorData{
 		setState(false);
 		if (minecart.getParallelBlocks().contains(this.sensor.getBlock())) {
 			if (minecart.isStorageMinecart()) {
-				//TODO storage minecart inventory
+				if (((MinecartManiaStorageCart)minecart).contains(this.itemId)) {
+					setState(true);
+				}
 			}
 			else if (minecart.hasPlayerPassenger()) {
 				if (minecart.getPlayerPassenger().getInventory().contains(this.itemId)) {
