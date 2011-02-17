@@ -29,6 +29,9 @@ public class SignCommands {
 		if (minecart.getBlockIdBeneath() != MinecartManiaWorld.getEjectorBlockId()) {
 			return false;
 		}
+		if (minecart.isPoweredBeneath()) {
+			return false;
+		}
 		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 8);
 		for (Sign sign : signList) {
 			for (int i = 0; i < 4; i++) {
