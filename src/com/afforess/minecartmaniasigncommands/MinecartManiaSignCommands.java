@@ -12,6 +12,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.afforess.minecartmaniacore.Configuration;
+
 public class MinecartManiaSignCommands extends JavaPlugin{
 	
 
@@ -44,6 +46,7 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 			this.setEnabled(false);
 		}
 		else {
+			Configuration.loadConfiguration(description, SettingList.config);
 	        getServer().getPluginManager().registerEvent(Event.Type.CUSTOM_EVENT, listener, Priority.High, this);
 	        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_ITEM, playerListener, Priority.Normal, this);
 	        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);

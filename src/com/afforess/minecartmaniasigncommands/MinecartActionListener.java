@@ -6,6 +6,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.event.MinecartActionEvent;
 import com.afforess.minecartmaniacore.event.MinecartLaunchedEvent;
@@ -34,6 +35,13 @@ public class MinecartActionListener extends MinecartManiaListener{
 		}
 		if (!action) {
 			action = SignCommands.doStationSign(minecart);
+		}
+		
+		if (minecart.isStorageMinecart()) {
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoSeed");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoHarvest");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoTill");
+			SignCommands.doAlterCollectRange((MinecartManiaStorageCart) minecart);
 		}
 		
 		event.setActionTaken(action);

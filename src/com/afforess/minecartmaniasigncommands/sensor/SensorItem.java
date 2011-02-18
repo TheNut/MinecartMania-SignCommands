@@ -19,6 +19,7 @@ public class SensorItem extends SensorData{
 	public void input(MinecartManiaMinecart minecart) {
 		if (minecart == null) {
 			setState(false);
+			MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), getState());
 			return;
 		}
 		setState(false);

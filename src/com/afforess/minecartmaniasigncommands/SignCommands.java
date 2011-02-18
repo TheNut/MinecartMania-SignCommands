@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.MinecartManiaPlayer;
+import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.utils.ChatUtils;
 import com.afforess.minecartmaniacore.utils.MinecartUtils;
@@ -47,6 +48,38 @@ public class SignCommands {
 			}
 		}
 		
+		return false;
+	}
+	
+	public static boolean doAutoSetting(MinecartManiaStorageCart minecart, String s) {
+		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
+		for (Sign sign : signList) {
+			for (int i = 0; i < 4; i++) {
+				if (sign.getLine(i).toLowerCase().contains(s.toLowerCase())) {
+					minecart.setDataValue(s, Boolean.TRUE);
+					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
+					sign.update();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean doAlterCollectRange(MinecartManiaStorageCart minecart) {
+		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
+		for (Sign sign : signList) {
+			for (int i = 0; i < 4; i++) {
+				if (sign.getLine(i).toLowerCase().contains("range")) {
+					String[] split = sign.getLine(i).split(":");
+					if (split.length != 2) continue;
+					minecart.setEntityDetectionRange(Integer.parseInt(StringUtils.getNumber(split[1])));
+					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
+					sign.update();
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 	
@@ -97,7 +130,7 @@ public class SignCommands {
 			if (sign.getLine(0).toLowerCase().contains("announce")) {
 				sign.setLine(0, "[Announce]");
 				if (minecart.hasPlayerPassenger()){
-					final String title = ChatColor.YELLOW + "[Announcement] " + ChatColor.WHITE;
+					final String title = ChatColor.YELLOW + MinecartManiaWorld.getConfigurationValue("Announcement Sign Prefix").toString() + " " + ChatColor.WHITE;
 					String annoucement = title + sign.getLine(1);
 					//! signifies a new line, otherwise continue message on same line
 					if (sign.getLine(2).startsWith("!")) {

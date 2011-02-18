@@ -17,6 +17,7 @@ public class SensorEntity extends SensorData{
 	public void input(MinecartManiaMinecart minecart) {
 		if (minecart == null) {
 			setState(false);
+			MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), getState());
 			return;
 		}
 		setState(minecart.getParallelBlocks().contains(this.sensor.getBlock()) && minecart.minecart.getPassenger() != null);
