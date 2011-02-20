@@ -171,7 +171,8 @@ public class SignCommands {
 			if (sign.getLine(0).toLowerCase().contains("announce")) {
 				sign.setLine(0, "[Announce]");
 				if (minecart.hasPlayerPassenger()){
-					final String title = ChatColor.YELLOW + MinecartManiaWorld.getConfigurationValue("Announcement Sign Prefix").toString() + " " + ChatColor.WHITE;
+					
+					final String title = MinecartManiaWorld.getConfigurationValue("Announcement Sign Prefix").toString() + " " + ChatColor.WHITE;
 					String annoucement = title + sign.getLine(1);
 					//! signifies a new line, otherwise continue message on same line
 					if (sign.getLine(2).startsWith("!")) {
