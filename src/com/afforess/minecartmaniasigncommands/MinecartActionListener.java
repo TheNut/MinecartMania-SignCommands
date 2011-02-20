@@ -11,6 +11,7 @@ import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.event.MinecartActionEvent;
 import com.afforess.minecartmaniacore.event.MinecartLaunchedEvent;
 import com.afforess.minecartmaniacore.event.MinecartManiaListener;
+import com.afforess.minecartmaniacore.event.MinecartManiaMinecartCreatedEvent;
 import com.afforess.minecartmaniacore.event.MinecartManiaMinecartDestroyedEvent;
 import com.afforess.minecartmaniacore.event.MinecartTimeEvent;
 
@@ -36,6 +37,12 @@ public class MinecartActionListener extends MinecartManiaListener{
 		if (!action) {
 			action = SignCommands.doStationSign(minecart);
 		}
+		if (!action) {
+			action = SignCommands.doMaxSpeedSign(minecart);
+		}
+		if (!action) {
+			action = SignCommands.doStopAtDestination(minecart);
+		}
 		
 		if (minecart.isStorageMinecart()) {
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoSeed");
@@ -53,6 +60,10 @@ public class MinecartActionListener extends MinecartManiaListener{
 		if (event.getMinecart().getDataValue("hold sign data") != null) {
 			event.setCancelled(true);
 		}
+	}
+	
+	public void onMinecartManiaMinecartCreatedEvent(MinecartManiaMinecartCreatedEvent event) {
+		SignCommands.updateSensors(event.getMinecart());
 	}
 	
 	public void onMinecartTimeEvent(MinecartTimeEvent event) {

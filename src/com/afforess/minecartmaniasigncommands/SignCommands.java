@@ -51,6 +51,29 @@ public class SignCommands {
 		return false;
 	}
 	
+	public static boolean doStopAtDestination(MinecartManiaMinecart minecart) {
+		if (!minecart.hasPlayerPassenger()) {
+			return false;
+		}
+		MinecartManiaPlayer player = MinecartManiaWorld.getMinecartManiaPlayer(minecart.getPlayerPassenger());
+		ArrayList<Sign> signList = SignUtils.getParallelSignList(minecart);
+		signList.addAll(SignUtils.getSignBeneathList(minecart, 2));
+		for (Sign sign : signList) {
+			if (sign.getLine(0).toLowerCase().contains("station stop")) {
+				sign.setLine(0, "[Station Stop]");
+				sign.setLine(1, StringUtils.addBrackets(sign.getLine(1)));
+				sign.update();
+				if (StringUtils.removeBrackets(sign.getLine(1)).equals(player.getLastStation())) {
+					minecart.stopCart();
+					ChatUtils.sendMultilineMessage(minecart.getPlayerPassenger(), "You've arrived at your destination", ChatColor.GREEN.toString());
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+	
 	public static boolean doAutoSetting(MinecartManiaStorageCart minecart, String s) {
 		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
 		for (Sign sign : signList) {
@@ -74,6 +97,24 @@ public class SignCommands {
 					String[] split = sign.getLine(i).split(":");
 					if (split.length != 2) continue;
 					minecart.setEntityDetectionRange(Integer.parseInt(StringUtils.getNumber(split[1])));
+					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
+					sign.update();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean doMaxSpeedSign(MinecartManiaMinecart minecart) {
+		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
+		for (Sign sign : signList) {
+			for (int i = 0; i < 4; i++) {
+				if (sign.getLine(i).toLowerCase().contains("max speed")) {
+					String[] split = sign.getLine(i).split(":");
+					if (split.length != 2) continue;
+					Double percent = Double.parseDouble(StringUtils.getNumber(split[1]));
+					minecart.minecart.setMaxSpeed(0.4D * percent / 100);
 					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
 					sign.update();
 					return true;
