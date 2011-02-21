@@ -9,6 +9,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.afforess.minecartmaniacore.utils.ChatUtils;
 import com.afforess.minecartmaniacore.utils.DirectionUtils;
+import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType;
 import com.afforess.minecartmaniasigncommands.sensor.SensorUtils;
 
@@ -48,7 +49,10 @@ public class SignCommandsPlayerListener extends PlayerListener{
 						}
 					}
 					else {
-						ChatUtils.sendMultilineWarning(event.getPlayer(), "There is not enough room to create a sensor here.");
+						//Hide warning if this is already a sensor
+						if (SensorManager.getSensor(sign.getBlock().getLocation().toVector()) == null) {
+							ChatUtils.sendMultilineWarning(event.getPlayer(), "There is not enough room to create a sensor here.");
+						}
 					}
 				}
 				else {

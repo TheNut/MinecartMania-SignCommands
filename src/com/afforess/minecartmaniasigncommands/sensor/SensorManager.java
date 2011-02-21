@@ -66,6 +66,27 @@ public class SensorManager {
 		if (type.equals(Type.DETECT_STORAGE)) {
 			return new SensorStorage(type, sign, center, lever);
 		}
+		if (type.equals(Type.DETECT_ZOMBIE)) {
+			return new SensorZombie(type, sign, center, lever);
+		}
+		if (type.equals(Type.DETECT_SKELETON)) {
+			return new SensorSkeleton(type, sign, center, lever);
+		}
+		if (type.equals(Type.DETECT_CREEPER)) {
+			return new SensorCreeper(type, sign, center, lever);
+		}
+		if (type.equals(Type.DETECT_PIG)) {
+			return new SensorPig(type, sign, center, lever);
+		}
+		if (type.equals(Type.DETECT_SHEEP)) {
+			return new SensorSheep(type, sign, center, lever);
+		}
+		if (type.equals(Type.DETECT_COW)) {
+			return new SensorCow(type, sign, center, lever);
+		}
+		if (type.equals(Type.DETECT_CHICKEN)) {
+			return new SensorChicken(type, sign, center, lever);
+		}
 
 		return null;
 	}

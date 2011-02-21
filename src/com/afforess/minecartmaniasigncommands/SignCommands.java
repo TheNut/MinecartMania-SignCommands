@@ -13,6 +13,7 @@ import com.afforess.minecartmaniacore.MinecartManiaPlayer;
 import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.utils.ChatUtils;
+import com.afforess.minecartmaniacore.utils.MathUtils;
 import com.afforess.minecartmaniacore.utils.MinecartUtils;
 import com.afforess.minecartmaniacore.utils.SignUtils;
 import com.afforess.minecartmaniacore.utils.StringUtils;
@@ -96,7 +97,8 @@ public class SignCommands {
 				if (sign.getLine(i).toLowerCase().contains("range")) {
 					String[] split = sign.getLine(i).split(":");
 					if (split.length != 2) continue;
-					minecart.setEntityDetectionRange(Integer.parseInt(StringUtils.getNumber(split[1])));
+					int range = MathUtils.range(Integer.parseInt(StringUtils.getNumber(split[1])), MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("Maximum Collection Range")), 0);
+					minecart.setEntityDetectionRange(range);
 					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
 					sign.update();
 					return true;

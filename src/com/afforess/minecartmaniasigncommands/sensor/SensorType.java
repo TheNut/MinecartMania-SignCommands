@@ -16,6 +16,13 @@ public class SensorType {
 	        DETECT_POWERED("0007", "Detect Powered"),
 	        DETECT_ITEM("0008", "Detect Item"),
 	        DETECT_PLYR_NAME("0009", "Detect Name"),
+	        DETECT_ZOMBIE("0010", "Detect Zombie"),
+	        DETECT_SKELETON("0011", "Detect Skeleton"),
+	        DETECT_CREEPER("0012", "Detect Creeper"),
+	        DETECT_PIG("0013", "Detect Pig"),
+	        DETECT_SHEEP("0014", "Detect Sheep"),
+	        DETECT_COW("0015", "Detect Cow"),
+	        DETECT_CHICKEN("0016", "Detect Chicken")
 	        ;
 	        private String type;
 	        private String desc;
