@@ -4,7 +4,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
 public class SensorPlayerName extends SensorData{
@@ -16,21 +15,14 @@ public class SensorPlayerName extends SensorData{
 	}
 
 	public void input(MinecartManiaMinecart minecart) {
-		if (minecart == null) {
-			setState(false);
-			MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), getState());
-			return;
-		}
-		setState(false);
-		if (minecart.getParallelBlocks().contains(this.sensor.getBlock())) {
+		boolean state = false;
+		if (minecart != null) {
 			if (minecart.hasPlayerPassenger()) {
 				if (minecart.getPlayerPassenger().getName().equals(this.name)) {
-					setState(true);
+					state = true;
 				}
 			}
-			
 		}
-		
-		MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), getState());
+		setState(state);
 	}
 }

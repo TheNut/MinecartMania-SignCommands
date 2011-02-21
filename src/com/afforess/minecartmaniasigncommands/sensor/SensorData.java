@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 
+import com.afforess.minecartmaniacore.MinecartManiaCore;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 
 public abstract class SensorData implements Sensor{
@@ -26,8 +27,25 @@ public abstract class SensorData implements Sensor{
 		return state;
 	}
 	
+	private void setStateDelayed(final boolean state) {
+		final SensorData sd = this;
+		Runnable r = new Runnable () {
+			public void run() {
+				sd.state = state;
+				MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), state);
+			}
+		};
+		MinecartManiaCore.server.getScheduler().scheduleSyncDelayedTask(MinecartManiaCore.instance, r, 8);
+	}
+	
 	protected void setState(boolean state) {
-		this.state = state;
+		if (!state) {
+			setStateDelayed(state);
+		}
+		else {
+			this.state = state;
+			MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), state);
+		}
 		update();
 	}
 

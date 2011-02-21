@@ -326,7 +326,7 @@ public class SignCommands {
 		for (Block block : minecart.getPreviousLocationParallelBlocks()) {
 			Sensor s = SensorManager.getSensor(block.getLocation().toVector());
 			if (s != null){
-				s.input(input);
+				s.input(null);
 			}
 		}
 	}
