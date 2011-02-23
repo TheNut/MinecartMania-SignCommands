@@ -31,7 +31,7 @@ public class StorageMinecartUtils {
 					
 					//Harvest fully grown crops first
 					if (minecart.getDataValue("AutoHarvest") != null) {
-						int data = MinecartManiaWorld.getBlockDataThreadSafe(minecart.minecart.getWorld(), x, y, z);
+						int data = MinecartManiaWorld.getBlockData(minecart.minecart.getWorld(), x, y, z);
 						if (id == Material.CROPS.getId()) {
 							//fully grown
 							if (data == 0x7) {
@@ -40,7 +40,7 @@ public class StorageMinecartUtils {
 								if ((new Random()).nextBoolean()) { //Randomly add second seed.
 									minecart.addItem(Material.SEEDS.getId());
 								}
-								MinecartManiaWorld.setBlockAtThreadSafe(minecart.minecart.getWorld(), Material.AIR.getId(), x, y, z);
+								MinecartManiaWorld.setBlockAt(minecart.minecart.getWorld(), Material.AIR.getId(), x, y, z);
 							}
 						}
 					}
@@ -51,7 +51,7 @@ public class StorageMinecartUtils {
 					if (minecart.getDataValue("AutoTill") != null) {
 						if (id == Material.GRASS.getId() ||  id == Material.DIRT.getId()) {
 							if (aboveId == Material.AIR.getId()) {
-								MinecartManiaWorld.setBlockAtThreadSafe(minecart.minecart.getWorld(), Material.SOIL.getId(), x, y, z);
+								MinecartManiaWorld.setBlockAt(minecart.minecart.getWorld(), Material.SOIL.getId(), x, y, z);
 							}
 						}
 					}
@@ -64,7 +64,7 @@ public class StorageMinecartUtils {
 						if (id == Material.SOIL.getId()) {
 							if (aboveId == Material.AIR.getId()) {
 								if (minecart.removeItem(Material.SEEDS.getId())) {
-									MinecartManiaWorld.setBlockAtThreadSafe(minecart.minecart.getWorld(), Material.CROPS.getId(), x, y+1, z);
+									MinecartManiaWorld.setBlockAt(minecart.minecart.getWorld(), Material.CROPS.getId(), x, y+1, z);
 								}
 							}
 						}
