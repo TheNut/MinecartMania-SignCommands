@@ -14,15 +14,19 @@ public abstract class SensorData implements Sensor{
 	public Sign sensor = null;
 	public Block center = null;
 	public Block lever = null;
+	public Block repeater = null;
 	
 	public SensorData(SensorType.Type type, Sign sign, Block center, Block lever) {
 		this.setType(type);
 		this.sensor = sign;
-		this.center = center;
-		this.lever = lever;
-		this.setState(false);
+		if (lever == null) {
+			this.repeater = center;
+		} else {
+			this.center = center;
+			this.lever = lever;
+		}
 	}
-
+	
 	public boolean getState() {
 		return state;
 	}
@@ -32,7 +36,12 @@ public abstract class SensorData implements Sensor{
 		Runnable r = new Runnable () {
 			public void run() {
 				sd.state = state;
-				MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), state);
+				if (lever != null) {
+					MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), state);
+				}
+				else {
+					MinecartManiaWorld.setBlockPowered(repeater.getWorld(), repeater.getX(), repeater.getY(), repeater.getZ(), state);
+				}
 			}
 		};
 		MinecartManiaCore.server.getScheduler().scheduleSyncDelayedTask(MinecartManiaCore.instance, r, 8);
@@ -44,7 +53,12 @@ public abstract class SensorData implements Sensor{
 		}
 		else {
 			this.state = state;
-			MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), state);
+			if (lever != null) {
+				MinecartManiaWorld.setBlockPowered(lever.getWorld(), lever.getX(), lever.getY(), lever.getZ(), state);
+			}
+			else {
+				MinecartManiaWorld.setBlockPowered(repeater.getWorld(), repeater.getX(), repeater.getY(), repeater.getZ(), state);
+			}
 		}
 		update();
 	}
@@ -58,13 +72,21 @@ public abstract class SensorData implements Sensor{
 			kill();
 			return;
 		}
-		if (!this.center.getType().equals(Material.WOOD)) {
-			kill();
-			return;
+		if (repeater == null) {
+			if (!this.center.getType().equals(Material.WOOD)) {
+				kill();
+				return;
+			}
+			if (!this.lever.getType().equals(Material.LEVER)){
+				kill();
+				return;
+			}
 		}
-		if (!this.lever.getType().equals(Material.LEVER)){
-			kill();
-			return;
+		else {
+			if (!this.repeater.getType().equals(Material.DIODE_BLOCK_ON) && !this.repeater.getType().equals(Material.DIODE_BLOCK_OFF)){
+				kill();
+				return;
+			}
 		}
 	}
 
@@ -78,6 +100,9 @@ public abstract class SensorData implements Sensor{
 	
 	public boolean equals(Block block) {
 		if (block.equals(sensor.getBlock())) {
+			return true;
+		}
+		if (block.equals(repeater)) {
 			return true;
 		}
 		if (block.equals(center)) {
@@ -97,14 +122,19 @@ public abstract class SensorData implements Sensor{
 			sensor.getWorld().dropItemNaturally(sensor.getBlock().getLocation(), new ItemStack(Material.SIGN.getId(), 1));
 		}
 		
-		if (center.getType().getId() == Material.WOOD.getId()) {
-			MinecartManiaWorld.setBlockAt(sensor.getWorld(), Material.AIR.getId(), center.getX(), center.getY(), center.getZ());
+		if (center != null && center.getType().getId() == Material.WOOD.getId()) {
+			MinecartManiaWorld.setBlockAt(center.getWorld(), Material.AIR.getId(), center.getX(), center.getY(), center.getZ());
 			sensor.getWorld().dropItemNaturally(center.getLocation(), new ItemStack(Material.WOOD.getId(), 1));
 		}
 		
-		if (lever.getType().getId() == Material.LEVER.getId()) {
-			MinecartManiaWorld.setBlockAt(sensor.getWorld(), Material.AIR.getId(), lever.getX(), lever.getY(), lever.getZ());
+		if (lever != null && lever.getType().getId() == Material.LEVER.getId()) {
+			MinecartManiaWorld.setBlockAt(lever.getWorld(), Material.AIR.getId(), lever.getX(), lever.getY(), lever.getZ());
 			sensor.getWorld().dropItemNaturally(lever.getLocation(), new ItemStack(Material.LEVER.getId(), 1));
+		}
+		
+		if (repeater != null && (repeater.getType().getId() == Material.DIODE_BLOCK_ON.getId() || repeater.getType().getId() == Material.DIODE_BLOCK_OFF.getId())) {
+			MinecartManiaWorld.setBlockAt(repeater.getWorld(), Material.AIR.getId(), repeater.getX(), repeater.getY(), repeater.getZ());
+			sensor.getWorld().dropItemNaturally(repeater.getLocation(), new ItemStack(Material.DIODE.getId(), 1));
 		}
 	}
 }

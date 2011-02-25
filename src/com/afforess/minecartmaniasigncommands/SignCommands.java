@@ -325,10 +325,12 @@ public class SignCommands {
 		}
 		
 		//deactivate old sensors
-		for (Block block : minecart.getPreviousLocationParallelBlocks()) {
-			Sensor s = SensorManager.getSensor(block.getLocation().toVector());
-			if (s != null){
-				s.input(null);
+		if (!minecart.getPreviousLocation().equals(minecart.minecart.getLocation().toVector())) {
+			for (Block block : minecart.getPreviousLocationParallelBlocks()) {
+				Sensor s = SensorManager.getSensor(block.getLocation().toVector());
+				if (s != null){
+					s.input(null);
+				}
 			}
 		}
 	}

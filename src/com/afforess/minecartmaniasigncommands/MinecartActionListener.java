@@ -52,7 +52,6 @@ public class MinecartActionListener extends MinecartManiaListener{
 		}
 		
 		event.setActionTaken(action);
-		
 		SignCommands.updateSensors(minecart);
 	}
 	

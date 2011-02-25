@@ -22,6 +22,10 @@ public class SensorManager {
 	public static ConcurrentHashMap<Vector, Sensor> getSensorList() {
 		return sensors;
 	}
+	
+	public static Sensor constructSensor(Sign sign, Block repeater, Type type) {
+		return constructSensor(sign, repeater, null, type, -1, "");
+	}
 	 
 	public static Sensor constructSensor(Sign sign, Block center, Block lever, Type type) {
 		return constructSensor(sign, center, lever, type, -1, "");
@@ -34,7 +38,7 @@ public class SensorManager {
 	public static Sensor constructSensor(Sign sign, Block center, Block lever, Type type, String playerName) {
 		return constructSensor(sign, center, lever, type, -1, playerName);
 	}
-	 
+	
 	private static Sensor constructSensor(Sign sign, Block center, Block lever, Type type, int itemId, String playerName) {
 		if (type.equals(Type.DETECT_ALL)) {
 			return new SensorAll(type, sign, center, lever);
