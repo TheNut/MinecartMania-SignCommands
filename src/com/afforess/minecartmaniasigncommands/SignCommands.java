@@ -76,11 +76,15 @@ public class SignCommands {
 	}
 	
 	public static boolean doAutoSetting(MinecartManiaStorageCart minecart, String s) {
+		return doAutoSetting(minecart, s, s, Boolean.TRUE);
+	}
+	
+	public static boolean doAutoSetting(MinecartManiaStorageCart minecart, String s, String key, Object value) {
 		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
 		for (Sign sign : signList) {
 			for (int i = 0; i < 4; i++) {
 				if (sign.getLine(i).toLowerCase().contains(s.toLowerCase())) {
-					minecart.setDataValue(s, Boolean.TRUE);
+					minecart.setDataValue(s, value);
 					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
 					sign.update();
 					return true;

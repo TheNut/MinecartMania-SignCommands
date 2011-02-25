@@ -48,6 +48,9 @@ public class MinecartActionListener extends MinecartManiaListener{
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoSeed");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoHarvest");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoTill");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Seed Off", "AutoSeed", null);
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Harvest Off", "AutoHarvest", null);
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Till Off", "AutoTill", null);
 			SignCommands.doAlterCollectRange((MinecartManiaStorageCart) minecart);
 		}
 		
