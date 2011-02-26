@@ -84,7 +84,7 @@ public class SignCommands {
 		for (Sign sign : signList) {
 			for (int i = 0; i < 4; i++) {
 				if (sign.getLine(i).toLowerCase().contains(s.toLowerCase())) {
-					minecart.setDataValue(s, value);
+					minecart.setDataValue(key, value);
 					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
 					sign.update();
 					return true;
