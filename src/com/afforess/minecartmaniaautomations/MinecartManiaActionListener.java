@@ -28,7 +28,8 @@ public class MinecartManiaActionListener extends MinecartManiaListener{
 					try {
 						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoFarm", paramtype), param);
 						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoTimber", paramtype), param);
-						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoFertilize", paramtype), param);
+						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartSugar.class.getDeclaredMethod("doAutoSugarFarm", paramtype), param);
+						//MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoFertilize", paramtype), param);
 					} catch (Exception e) {
 					
 					}
