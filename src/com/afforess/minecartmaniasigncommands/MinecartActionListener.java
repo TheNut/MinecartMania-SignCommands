@@ -48,9 +48,15 @@ public class MinecartActionListener extends MinecartManiaListener{
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoSeed");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoHarvest");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoTill");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoTimber");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoForest");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoFertilize");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Seed Off", "AutoSeed", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Harvest Off", "AutoHarvest", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Till Off", "AutoTill", null);
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Timber Off", "AutoTimber", null);
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Forest Off", "AutoForest", null);
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Fertilize Off", "AutoFertilize", null);
 			SignCommands.doAlterCollectRange((MinecartManiaStorageCart) minecart);
 		}
 		
@@ -60,7 +66,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 	
 	public void onMinecartLaunchedEvent(MinecartLaunchedEvent event) {
 		if (event.getMinecart().getDataValue("hold sign data") != null) {
-			event.setCancelled(true);
+			event.setActionTaken(true);
 		}
 	}
 	
