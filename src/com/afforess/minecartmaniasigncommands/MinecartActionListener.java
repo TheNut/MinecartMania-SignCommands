@@ -29,20 +29,15 @@ public class MinecartActionListener extends MinecartManiaListener{
 			action = SignCommands.doElevatorSign(minecart, sign);
 		}
 		if (!action) {
-			action = SignCommands.doAnnouncementSign(minecart);
-		}
-		if (!action) {
 			action = SignCommands.doEjectionSign(minecart);
 		}
 		if (!action) {
 			action = SignCommands.doStationSign(minecart);
 		}
-		if (!action) {
-			action = SignCommands.doMaxSpeedSign(minecart);
-		}
-		if (!action) {
-			action = SignCommands.doStopAtDestination(minecart);
-		}
+		
+		SignCommands.doAnnouncementSign(minecart);
+		SignCommands.doMaxSpeedSign(minecart);
+		SignCommands.doStopAtDestination(minecart);
 		
 		if (minecart.isStorageMinecart()) {
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoSeed");
@@ -51,12 +46,16 @@ public class MinecartActionListener extends MinecartManiaListener{
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoTimber");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoForest");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoFertilize");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoSugar");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoPlant");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Seed Off", "AutoSeed", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Harvest Off", "AutoHarvest", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Till Off", "AutoTill", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Timber Off", "AutoTimber", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Forest Off", "AutoForest", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Fertilize Off", "AutoFertilize", null);
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Sugar Off", "AutoSugar", null);
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Plant Off", "AutoPlant", null);
 			SignCommands.doAlterCollectRange((MinecartManiaStorageCart) minecart);
 		}
 		
