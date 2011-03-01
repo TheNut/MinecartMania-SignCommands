@@ -15,6 +15,7 @@ import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.utils.ChatUtils;
 import com.afforess.minecartmaniacore.utils.MathUtils;
 import com.afforess.minecartmaniacore.utils.MinecartUtils;
+import com.afforess.minecartmaniacore.utils.EntityUtils;
 import com.afforess.minecartmaniacore.utils.SignUtils;
 import com.afforess.minecartmaniacore.utils.StringUtils;
 import com.afforess.minecartmaniasigncommands.sensor.Sensor;
@@ -148,7 +149,7 @@ public class SignCommands {
 				if (line.contains("eject here")) {
 					sign.setLine(i, "[Eject Here]");
 					sign.update();
-					Location loc = PlayerUtils.getValidPlayerLocation(sign.getBlock());
+					Location loc = EntityUtils.getValidLocation(sign.getBlock());
 					if (loc != null) {
 						Entity passenger = minecart.minecart.getPassenger();
 						minecart.minecart.eject();
