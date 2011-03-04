@@ -33,15 +33,13 @@ public class SignCommands {
 		signList.addAll(SignUtils.getSignBeneathList(minecart, 2));
 		for (Sign sign : signList) {
 			for (int i = 0; i < 4; i++) {
-				if (sign.getLine(i).toLowerCase().contains("station")) {
+				
+				if (sign.getLine(i).toLowerCase().contains("[station")) {
 					String val[] = sign.getLine(i).toLowerCase().split(":");
 					if (val.length != 2) {
 						continue;
 					}
-					val[1] = val[1].trim();
-					if (val[1].contains("]")) {
-						val[1] = val[1].substring(0, val[1].indexOf(']'));
-					}
+					val[1] = StringUtils.removeBrackets(val[1].trim());
 					MinecartManiaPlayer player = MinecartManiaWorld.getMinecartManiaPlayer(minecart.getPlayerPassenger());
 					player.setLastStation(val[1]);
 					sign.setLine(i, "[Station:" + val[1]+"]");
@@ -164,8 +162,11 @@ public class SignCommands {
 	}
 	
 	public static boolean doAnnouncementSign(MinecartManiaMinecart minecart) {
-		ArrayList<Sign> signList = SignUtils.getParallelSignList(minecart);
-		signList.addAll(SignUtils.getSignBeneathList(minecart, 2));
+		ArrayList<Sign> signList = SignUtils.getSignBeneathList(minecart, 2);
+		//Possibility of overlapping with sloped track, so disregard parallel signs
+		if (!MinecartUtils.isSlopedTrack(minecart.minecart.getWorld(), minecart.getX(), minecart.getY(), minecart.getZ())) {
+			signList.addAll(SignUtils.getParallelSignList(minecart));
+		}
 		for (Sign sign : signList) {
 			
 			//Temporary CraftBook conversion start - will be removed before MMC 1.0
