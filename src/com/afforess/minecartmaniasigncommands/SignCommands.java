@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 
+import com.afforess.minecartmaniacore.Item;
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.MinecartManiaPlayer;
 import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
@@ -270,16 +271,16 @@ public class SignCommands {
 						if (isElevatorSign(elevator)) {
 							
 							Location nextFloor = null;
-							if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ()))) {
+							if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ()) == Item.RAILS.getId()) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ());
 							}
-							else if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getWorld(), elevator.getX() + 1, i, elevator.getZ()))) {
+							else if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() + 1, i, elevator.getZ()) == Item.RAILS.getId()) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX() + 1, i, elevator.getZ());
 							}
-							else if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() - 1))) {
+							else if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() - 1) == Item.RAILS.getId()) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX(), i, elevator.getZ() - 1);
 							}
-							else if (MinecartUtils.isMinecartTrack(MinecartManiaWorld.getBlockAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() + 1))) {
+							else if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() + 1) == Item.RAILS.getId()) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX(), i, elevator.getZ() + 1);
 							}
 							if (nextFloor != null) {
