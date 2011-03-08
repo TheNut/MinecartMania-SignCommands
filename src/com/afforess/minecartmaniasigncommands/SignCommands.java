@@ -120,6 +120,7 @@ public class SignCommands {
 					String[] split = sign.getLine(i).split(":");
 					if (split.length != 2) continue;
 					Double percent = Double.parseDouble(StringUtils.getNumber(split[1]));
+					percent = Math.min(percent, MinecartManiaWorld.getMaximumMinecartSpeedPercent());
 					minecart.minecart.setMaxSpeed(0.4D * percent / 100);
 					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
 					sign.update();
