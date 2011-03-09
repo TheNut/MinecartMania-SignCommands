@@ -6,7 +6,6 @@ import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.event.MinecartActionEvent;
 import com.afforess.minecartmaniacore.event.MinecartManiaListener;
 
-
 public class MinecartManiaActionListener extends MinecartManiaListener{
 	
 	public void onMinecartActionEvent(MinecartActionEvent event) {
@@ -14,8 +13,9 @@ public class MinecartManiaActionListener extends MinecartManiaListener{
 			MinecartManiaMinecart minecart = event.getMinecart();
 
 			if (minecart.isStorageMinecart()) {
+
 				//Efficiency. Don't farm overlapping tiles repeatedly, waste of time
-				int interval = MinecartManiaWorld.getIntValue(minecart.getDataValue("Farm Interval"));
+				int interval = MinecartManiaWorld.getIntValue(minecart.getDataValue("Farm Interval")) * 4;
 				if (interval == 0) {
 					minecart.setDataValue("Farm Interval", new Integer(interval - 1));
 				}
@@ -26,10 +26,11 @@ public class MinecartManiaActionListener extends MinecartManiaListener{
 					@SuppressWarnings("rawtypes")
 					Class[] paramtype = { MinecartManiaStorageCart.class };
 					try {
-						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoFarm", paramtype), param);
-						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoTimber", paramtype), param);
-						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartSugar.class.getDeclaredMethod("doAutoSugarFarm", paramtype), param);
-						//MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoFertilize", paramtype), param);
+						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoFarm", paramtype), interval, param);
+						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoTimber", paramtype), interval, param);
+						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoCactus", paramtype), interval, param);
+						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartSugar.class.getDeclaredMethod("doAutoSugarFarm", paramtype), interval, param);
+						MinecartManiaTaskScheduler.doAsyncTask(StorageMinecartUtils.class.getDeclaredMethod("doAutoFertilize", paramtype), interval, param);
 					} catch (Exception e) {
 					
 					}
