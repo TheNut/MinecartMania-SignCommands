@@ -131,12 +131,12 @@ public class StorageMinecartUtils {
 					//update data
 					id = MinecartManiaWorld.getBlockIdAt(minecart.minecart.getWorld(), x, y, z);
 					aboveId = MinecartManiaWorld.getBlockIdAt(minecart.minecart.getWorld(), x, y+1, z);
-					
+
 					//Replant Cactus
 					if (minecart.getDataValue("AutoReCactus") != null) {
 						if (id == Material.SAND.getId()) {
 							if (aboveId == Material.AIR.getId()) {
-								
+
 								// Need to check for blocks to the sides of the cactus position 
 								// as this would normally block planting.
 
@@ -209,9 +209,10 @@ public class StorageMinecartUtils {
 	}
 
 	public static void doAutoFertilize(MinecartManiaStorageCart minecart) {
-
+		return; // Todo: Make this work right without flashing trees/crops.
+		/* 
 		if (minecart.getDataValue("AutoFertilize") == null) {
-			return;
+		 	return;
 		}
 
 		if (MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("Nearby Collection Range")) < 1) {
@@ -221,49 +222,62 @@ public class StorageMinecartUtils {
 		Location loc = minecart.minecart.getLocation().clone();
 		int range = minecart.getEntityDetectionRange();
 
-		for (int dx = -(range); dx <= range; dx++){
-			for (int dy = -(range); dy <= range; dy++){
-				for (int dz = -(range); dz <= range; dz++){
-					//Setup data
-					int x = loc.getBlockX() + dx;
-					int y = loc.getBlockY() + dy;
-					int z = loc.getBlockZ() + dz;
-					World w = minecart.minecart.getWorld();
+		int allowcycle = (range * 2) + 1;
+		
+		// In theory if we only run a refertilize cycle at range * 2 we should not overlap
+		// refertilizing which should block the flashing tree/crops effect. Assuming we only increase the
+		// count by 1 per each block. 
+		 
+		if(blockcycle == allowcycle) {
+			blockcycle = 0;
+			for (int dx = -(range); dx <= range; dx++){
+				for (int dy = -(range); dy <= range; dy++){
+					for (int dz = -(range); dz <= range; dz++){
+						//Setup data
+						int x = loc.getBlockX() + dx;
+						int y = loc.getBlockY() + dy;
+						int z = loc.getBlockZ() + dz;
+						World w = minecart.minecart.getWorld();
 
-					int id = MinecartManiaWorld.getBlockIdAt(w, x, y, z);
+						int id = MinecartManiaWorld.getBlockIdAt(w, x, y, z);
 
-					if (minecart.getDataValue("AutoFertilize") != null) {
-						int data = MinecartManiaWorld.getBlockData(w, x, y, z);
+						if (minecart.getDataValue("AutoFertilize") != null) {
+							int data = MinecartManiaWorld.getBlockData(w, x, y, z);
 
-						if(id == Material.SAPLING.getId()) {
-							if (minecart.removeItem(Material.INK_SACK.getId(), 1, (short)15))  {
-								// Remove 1 unit of bonemeal and try to dump a tree
+							if(id == Material.SAPLING.getId()) {
+								if (minecart.removeItem(Material.INK_SACK.getId(), 1, (short)15))  {
+									// Remove 1 unit of bonemeal and try to dump a tree
 
-								int rand = ((new Random()).nextInt(5));
-								TreeType t = null;
-								switch (rand) {
-								case 0: t = TreeType.BIG_TREE; break;
-								case 1: t = TreeType.BIRCH; break;
-								case 2: t = TreeType.REDWOOD; break;
-								case 3: t = TreeType.TALL_REDWOOD; break;
-								case 4: t = TreeType.TREE; break;
-								//default: t = TreeType.TREE; 
+									int rand = ((new Random()).nextInt(5));
+									TreeType t = null;
+									switch (rand) {
+									case 0: t = TreeType.BIG_TREE; break;
+									case 1: t = TreeType.BIRCH; break;
+									case 2: t = TreeType.REDWOOD; break;
+									case 3: t = TreeType.TALL_REDWOOD; break;
+									case 4: t = TreeType.TREE; break;
+									//default: t = TreeType.TREE; 
+									}
+									MinecartManiaWorld.setBlockAt(w, 0, x, y, z);
+									w.generateTree(new Location(w, x, y, z), t);
 								}
-								MinecartManiaWorld.setBlockAt(w, 0, x, y, z);
-								w.generateTree(new Location(w, x, y, z), t);
-							}
-						} else if (id == Material.CROPS.getId()) {
-							if (data != 0x7) {
-								if (minecart.removeItem(Material.INK_SACK.getId(), 1, (short) 15)) {
-									MinecartManiaWorld.setBlockData(w, 0x7, x, y, z);
+							} else if (id == Material.CROPS.getId()) {
+								if (data != 0x7) {
+									if (minecart.removeItem(Material.INK_SACK.getId(), 1, (short) 15)) {
+										MinecartManiaWorld.setBlockData(w, 0x7, x, y, z);
+									}
 								}
 							}
-
 						}
 					}
-				}
+				} 
 			}
+
+		} else {
+			blockcycle++;
+			log.info("Blockcycle: " + blockcycle);
 		}
+	*/
 	}
 
 
