@@ -1,105 +1,99 @@
 package com.afforess.minecartmaniasigncommands.sensor;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.block.Sign;
-import org.bukkit.util.Vector;
 
-import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
+import com.afforess.minecartmaniacore.MinecartManiaCore;
 
 public class SensorManager {
-	private static final ConcurrentHashMap<Vector, Sensor> sensors = new ConcurrentHashMap<Vector, Sensor>();
+	private static final ConcurrentHashMap<Location, Sensor> sensors = new ConcurrentHashMap<Location, Sensor>();
 
-	public static Sensor getSensor(Vector v) {
-        return sensors.get(v);
-    }
-	
-	public static Sensor addSensor(Vector v, Sensor s) {
-        return sensors.put(v, s);
-    }
-	
-	public static ConcurrentHashMap<Vector, Sensor> getSensorList() {
+	public static Sensor getSensor(Location loc) {
+		Sensor s = sensors.get(loc);
+		if (s != null) {
+			if (!(loc.getBlock().getState() instanceof Sign)) {
+				sensors.remove(loc);
+				s = null;
+			}
+			else if (!verifySensor((Sign)loc.getBlock().getState(), s)) {
+				sensors.remove(loc);
+				s = null;
+			}
+		}
+		return s;
+	}
+
+	public static Sensor addSensor(Location loc, Sensor s) {
+		return sensors.put(loc, s);
+	}
+
+	public static ConcurrentHashMap<Location, Sensor> getSensorList() {
 		return sensors;
 	}
-	
-	public static Sensor constructSensor(Sign sign, Block repeater, Type type) {
-		return constructSensor(sign, repeater, null, type, -1, "");
+
+	 public static boolean delSensor(Location loc) {
+		 if (sensors.containsKey(loc)) {
+			 sensors.remove(loc);
+			 return true;
+		 }
+		 return false;
 	}
 	 
-	public static Sensor constructSensor(Sign sign, Block center, Block lever, Type type) {
-		return constructSensor(sign, center, lever, type, -1, "");
-	}
-	
-	public static Sensor constructSensor(Sign sign, Block center, Block lever, Type type, int itemId) {
-		return constructSensor(sign, center, lever, type, itemId, "");
-	}
-	
-	public static Sensor constructSensor(Sign sign, Block center, Block lever, Type type, String playerName) {
-		return constructSensor(sign, center, lever, type, -1, playerName);
-	}
-	
-	private static Sensor constructSensor(Sign sign, Block center, Block lever, Type type, int itemId, String playerName) {
-		if (type.equals(Type.DETECT_ALL)) {
-			return new SensorAll(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_ANIMAL)) {
-			return new SensorAnimal(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_EMPTY)) {
-			return new SensorEmpty(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_ENTITY)) {
-			return new SensorEntity(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_ITEM)) {
-			return new SensorItem(type, sign, center, lever, itemId);
-		}
-		if (type.equals(Type.DETECT_MOB)) {
-			return new SensorMob(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_PLAYER)) {
-			return new SensorPlayer(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_PLYR_NAME)) {
-			return new SensorPlayerName(type, sign, center, lever, playerName);
-		}
-		if (type.equals(Type.DETECT_POWERED)) {
-			return new SensorPowered(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_STORAGE)) {
-			return new SensorStorage(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_ZOMBIE)) {
-			return new SensorZombie(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_SKELETON)) {
-			return new SensorSkeleton(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_CREEPER)) {
-			return new SensorCreeper(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_PIG)) {
-			return new SensorPig(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_SHEEP)) {
-			return new SensorSheep(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_COW)) {
-			return new SensorCow(type, sign, center, lever);
-		}
-		if (type.equals(Type.DETECT_CHICKEN)) {
-			return new SensorChicken(type, sign, center, lever);
-		}
+	 public static boolean verifySensor(Sign sign, Sensor sensor) {
+		 if (!sign.getLine(0).split(":")[1].trim().equals(sensor.getType().getType())) {
+			 return false;
+		 }
+		 if (!sign.getLine(1).trim().equals(sensor.getName())) {
+			 return false;
+		 }
+		 
+		 return true;
+	 }
+	 
+	 public static void saveSensors() {
+		 File sensorData = new File(MinecartManiaCore.dataDirectory + File.separator + "Sensors.data");
+		 try {
+			PrintWriter pw = new PrintWriter(sensorData);
+			Iterator<Entry<Location, Sensor>> i = sensors.entrySet().iterator();
+			while(i.hasNext()) {
+				Entry<Location, Sensor> e = i.next();
+				if (e.getValue() instanceof GenericSensor) {
+					pw.append(((GenericSensor)e.getValue()).toString());
+					pw.append("\n");
+				}
+			}
+			pw.close();
+		 }
+		 catch (IOException ex) {
+			 MinecartManiaCore.log.severe("[Minecart Mania] Failed to save sensor data");
+		 }
+	 }
+	 
+	 public static void loadSensors() {
+		 File sensorData = new File(MinecartManiaCore.dataDirectory + File.separator + "Sensors.data");
+		 if (sensorData.exists()) {
+			 try {
+				Scanner input = new Scanner(sensorData);
 
-		return null;
-	}
-
-	 public static boolean delSensor(Vector v) {
-        if (sensors.containsKey(v)) {
-            sensors.remove(v);
-            return true;
-        }
-        return false;
-    }
+				while(input.hasNext()){
+					String str = input.nextLine();
+					Sensor s = GenericSensor.fromString(str);
+					addSensor(s.getLocation(), s);
+				}
+				input.close();
+			 }
+			 catch (IOException ex) {
+				 MinecartManiaCore.log.severe("[Minecart Mania] Failed to load sensor data!");
+			 }
+			 
+		 }
+	 }
 }

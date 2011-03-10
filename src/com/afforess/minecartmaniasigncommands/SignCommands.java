@@ -21,8 +21,6 @@ import com.afforess.minecartmaniacore.utils.SignUtils;
 import com.afforess.minecartmaniacore.utils.StringUtils;
 import com.afforess.minecartmaniasigncommands.sensor.Sensor;
 import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
-import com.afforess.minecartmaniasigncommands.sensor.SensorType;
-import com.afforess.minecartmaniasigncommands.sensor.SensorUtils;
 
 public class SignCommands {
 	
@@ -296,36 +294,11 @@ public class SignCommands {
 		}
 		return false;
 	}
-	public static boolean isRedstoneSensorSign(Sign sign) {
-		return getRedstoneSensorSign(sign) != null;
-	}
-	
-	public static SensorType.Type getRedstoneSensorSign(Sign sign) {
-		//is a sensor sign
-		if (sign.getLine(0).toLowerCase().contains("sensor")) {
-			for (SensorType.Type sensor : SensorType.Type.values()) {
-				if (sign.getLine(1).contains(sensor.getType())) {
-					return sensor;
-				}
-			}
-		}
-		
-		return null;
-	}
 	
 	public static void updateSensors(MinecartManiaMinecart minecart, MinecartManiaMinecart input) {
 		//Activate new sensors
 		for (Block block : minecart.getParallelBlocks()) {
-			Sensor s = SensorManager.getSensor(block.getLocation().toVector());
-			if (s == null){
-				//Activate disable sensors
-				if (block.getState() instanceof Sign) {
-					if (SensorUtils.isInActiveSensor((Sign)block.getState())) {
-						SensorUtils.activateSensor((Sign)block.getState());
-						s = SensorManager.getSensor(block.getLocation().toVector());
-					}
-				}
-			}
+			Sensor s = SensorManager.getSensor(block.getLocation());
 			if (s != null) {
 				s.input(input);
 			}
@@ -335,7 +308,7 @@ public class SignCommands {
 		//deactivate old sensors
 		if (!minecart.getPreviousLocation().equals(minecart.minecart.getLocation().toVector())) {
 			for (Block block : minecart.getPreviousLocationParallelBlocks()) {
-				Sensor s = SensorManager.getSensor(block.getLocation().toVector());
+				Sensor s = SensorManager.getSensor(block.getLocation());
 				if (s != null){
 					s.input(null);
 				}

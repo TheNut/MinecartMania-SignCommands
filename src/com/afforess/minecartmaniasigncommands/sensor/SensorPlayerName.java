@@ -1,28 +1,32 @@
 package com.afforess.minecartmaniasigncommands.sensor;
 
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
+import com.afforess.minecartmaniacore.utils.StringUtils;
 
-public class SensorPlayerName extends SensorData{
+public class SensorPlayerName extends GenericSensor{
+	private String player;
 
-	private String name;
-	public SensorPlayerName(Type type, Sign sign, Block center, Block lever, String name) {
-		super(type, sign, center, lever);
-		this.name = name;
+	private static final long serialVersionUID = 279941565L;
+	public SensorPlayerName(SensorType type, Sign sign, String name, String player) {
+		super(type, sign, name);
+		this.player = player;
 	}
 
 	public void input(MinecartManiaMinecart minecart) {
 		boolean state = false;
 		if (minecart != null) {
 			if (minecart.hasPlayerPassenger()) {
-				if (minecart.getPlayerPassenger().getName().equals(this.name)) {
+				if (minecart.getPlayerPassenger().getName().equals(this.player)) {
 					state = true;
 				}
 			}
 		}
 		setState(state);
+	}
+	
+	public String toString() {
+		return "[" + StringUtils.removeBrackets(format()) + ":" + player + "]";
 	}
 }

@@ -11,6 +11,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.afforess.minecartmaniacore.Configuration;
+import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
 
 public class MinecartManiaSignCommands extends JavaPlugin{
 
@@ -19,12 +20,11 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 	public static PluginDescriptionFile description;
 	public static MinecartActionListener listener = new MinecartActionListener();
 	public static MinecartVehicleListener vehicleListener = new MinecartVehicleListener();
-	public static SignCommandsPlayerListener playerListener = new SignCommandsPlayerListener();
 	public static SignCommandsBlockListener blockListener = new SignCommandsBlockListener();
 
 	public void onDisable() {
-		// TODO Auto-generated method stub
-		
+		log.info("[Minecart Mania] Saving Sensor Data.");
+		SensorManager.saveSensors();
 	}
 
 	public void onEnable() {
@@ -42,9 +42,10 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 	        getServer().getPluginManager().registerEvent(Event.Type.CUSTOM_EVENT, listener, Priority.Low, this);
 	        getServer().getPluginManager().registerEvent(Event.Type.VEHICLE_ENTER, vehicleListener, Priority.Monitor, this);
 	        getServer().getPluginManager().registerEvent(Event.Type.VEHICLE_EXIT, vehicleListener, Priority.Monitor, this);
-	        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_ITEM, playerListener, Priority.Normal, this);
-	        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Normal, this);
+	        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
 	        getServer().getPluginManager().registerEvent(Event.Type.BLOCK_PHYSICS, blockListener, Priority.Normal, this);
+	        
+	        SensorManager.loadSensors();
 	        
 	        PluginDescriptionFile pdfFile = this.getDescription();
 	        log.info( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );

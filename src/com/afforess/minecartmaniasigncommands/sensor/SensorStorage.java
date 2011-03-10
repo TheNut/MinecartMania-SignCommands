@@ -1,16 +1,14 @@
 package com.afforess.minecartmaniasigncommands.sensor;
 
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
-public class SensorStorage extends SensorData{
+public class SensorStorage extends GenericSensor{
 	
-	public SensorStorage(Type type, Sign sign, Block center, Block lever) {
-		super(type, sign, center, lever);
-		// TODO Auto-generated constructor stub
+	private static final long serialVersionUID = -9726441565L;
+	public SensorStorage(SensorType type, Sign sign, String name) {
+		super(type, sign, name);
 	}
 
 	public void input(MinecartManiaMinecart minecart) {

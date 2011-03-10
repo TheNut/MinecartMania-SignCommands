@@ -1,17 +1,15 @@
 package com.afforess.minecartmaniasigncommands.sensor;
 
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Cow;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.minecartmaniasigncommands.sensor.SensorType.Type;
 
-public class SensorCow extends SensorData{
+public class SensorCow extends GenericSensor{
 	
-	public SensorCow(Type type, Sign sign, Block center, Block lever) {
-		super(type, sign, center, lever);
-		// TODO Auto-generated constructor stub
+	private static final long serialVersionUID = 7941215573351195L;
+	public SensorCow(SensorType type, Sign sign, String name) {
+		super(type, sign, name);
 	}
 
 	public void input(MinecartManiaMinecart minecart) {
