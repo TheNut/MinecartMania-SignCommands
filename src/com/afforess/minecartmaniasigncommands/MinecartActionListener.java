@@ -48,6 +48,8 @@ public class MinecartActionListener extends MinecartManiaListener{
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoFertilize");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoSugar");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoPlant");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoCactus");
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "AutoReCactus");
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Seed Off", "AutoSeed", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Harvest Off", "AutoHarvest", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Till Off", "AutoTill", null);
@@ -56,6 +58,8 @@ public class MinecartActionListener extends MinecartManiaListener{
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Fertilize Off", "AutoFertilize", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Sugar Off", "AutoSugar", null);
 			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Plant Off", "AutoPlant", null);
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "Cactus Off", "AutoCactus", null);
+			SignCommands.doAutoSetting((MinecartManiaStorageCart) minecart, "ReCactus Off", "AutoCactus", null);
 			SignCommands.doAlterCollectRange((MinecartManiaStorageCart) minecart);
 		}
 		
