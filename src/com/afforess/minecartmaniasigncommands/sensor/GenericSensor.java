@@ -88,6 +88,7 @@ public abstract class GenericSensor implements Sensor, Serializable {
 	protected void update() {
 		Block diode = getDiode();
 		if (diode != null) {
+			diode.getWorld().loadChunk(diode.getChunk());
 			byte data = diode.getData();
 			if (output()) {
 				diode.setTypeId(Item.DIODE_BLOCK_ON.getId());
@@ -97,6 +98,7 @@ public abstract class GenericSensor implements Sensor, Serializable {
 			}
 			diode.setData(data);
 		}
+		
 	}
 	
 	public Block getDiode() {
