@@ -48,7 +48,7 @@ public class SignCommandsBlockListener extends BlockListener{
 			Iterator<Entry<Location, Sensor>> i = sensorList.entrySet().iterator();
 			while(i.hasNext()) {
 				Entry<Location, Sensor> e = i.next();
-				if (((GenericSensor)e.getValue()).equals(event.getBlock().getLocation())) {
+				if (e.getValue().getLocation().getBlock().getState() instanceof Sign && ((GenericSensor)e.getValue()).equals(event.getBlock().getLocation())) {
 					event.setCancelled(true);
 					return;
 				}

@@ -296,21 +296,41 @@ public class SignCommands {
 	}
 	
 	public static void updateSensors(MinecartManiaMinecart minecart, MinecartManiaMinecart input) {
+		
+		ArrayList<Block> blockList = minecart.getAdjacentBlocks(1);
+		blockList.addAll(minecart.getBlocksBeneath(3));
+		ArrayList<Block> oldBlockList = minecart.getPreviousLocationAdjacentBlocks(1);
+		oldBlockList.addAll(minecart.getPreviousLocationBlocksBeneath(3));
+		//prune overlapping, valid blocks
+		for (Block b : blockList) {
+			if (oldBlockList.contains(b)) {
+				oldBlockList.remove(b);
+			}
+		}
+
 		//Activate new sensors
-		for (Block block : minecart.getParallelBlocks()) {
+		for (Block block : blockList) {
 			Sensor s = SensorManager.getSensor(block.getLocation());
 			if (s != null) {
-				s.input(input);
+				try {
+					s.input(input);
+				}
+				catch (Exception e) {
+					SensorManager.delSensor(s.getLocation());
+				}
 			}
 			
 		}
 		
 		//deactivate old sensors
-		if (!minecart.getPreviousLocation().equals(minecart.minecart.getLocation().toVector())) {
-			for (Block block : minecart.getPreviousLocationParallelBlocks()) {
-				Sensor s = SensorManager.getSensor(block.getLocation());
-				if (s != null){
+		for (Block block : oldBlockList) {
+			Sensor s = SensorManager.getSensor(block.getLocation());
+			if (s != null){
+				try {
 					s.input(null);
+				}
+				catch (Exception e) {
+					SensorManager.delSensor(s.getLocation());
 				}
 			}
 		}

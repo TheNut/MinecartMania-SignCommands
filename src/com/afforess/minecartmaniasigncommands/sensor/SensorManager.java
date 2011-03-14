@@ -86,7 +86,9 @@ public class SensorManager {
 				while(input.hasNext()){
 					String str = input.nextLine();
 					Sensor s = GenericSensor.fromString(str);
-					addSensor(s.getLocation(), s);
+					if (s != null) {
+						addSensor(s.getLocation(), s);
+					}
 				}
 				input.close();
 			 }

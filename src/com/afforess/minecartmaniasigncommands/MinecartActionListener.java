@@ -21,7 +21,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 		boolean action = event.isActionTaken();
 		MinecartManiaMinecart minecart = event.getMinecart();
 		
-		if (!action && minecart.getBlockIdBeneath() == MinecartManiaWorld.getCatcherBlockId()) {
+		if (!action && minecart.getBlockIdBeneath() == (MinecartManiaWorld.getCatcherBlockId())) {
 			action = SignCommands.doHoldSign(minecart);
 		}
 		if (!action && minecart.getBlockTypeAhead() != null && minecart.getBlockTypeAhead().getState() instanceof Sign) {
