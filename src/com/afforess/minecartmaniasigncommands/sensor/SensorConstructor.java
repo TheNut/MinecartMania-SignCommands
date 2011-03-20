@@ -24,12 +24,6 @@ public abstract class SensorConstructor {
 	
 	public static Sensor constructSensor(Sign sign, Player player) {
 		if (isInactiveSensor(sign)) {
-			if (sign.getLine(1).trim().isEmpty()) {
-				if (player != null) {
-					ChatUtils.sendMultilineWarning(player, "Sensors Must Be Given a Unique Name, On Line 2");
-				}
-				return null;
-			}
 			SensorType sensorType = SensorType.fromName(sign.getLine(0).split(":")[1].trim());
 			
 			//Special Cases

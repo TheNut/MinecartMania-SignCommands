@@ -84,11 +84,14 @@ public class SensorManager {
 				Scanner input = new Scanner(sensorData);
 
 				while(input.hasNext()){
-					String str = input.nextLine();
-					Sensor s = GenericSensor.fromString(str);
-					if (s != null) {
-						addSensor(s.getLocation(), s);
+					try {
+						String str = input.nextLine();
+						Sensor s = GenericSensor.fromString(str);
+						if (s != null) {
+							addSensor(s.getLocation(), s);
+						}
 					}
+					catch (Exception e) {}
 				}
 				input.close();
 			 }

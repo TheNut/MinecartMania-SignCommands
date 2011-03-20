@@ -74,8 +74,10 @@ public abstract class GenericSensor implements Sensor, Serializable {
 	private void delayedDisable() {
 		Runnable task = new Runnable() {
 			public void run() {
-				disable();
-				update();
+				if (sign.getBlock().getState() instanceof Sign) {
+					disable();
+					update();
+				}
 			}
 		};
 		MinecartManiaCore.server.getScheduler().scheduleSyncDelayedTask(MinecartManiaCore.instance, task, 8);
@@ -112,7 +114,7 @@ public abstract class GenericSensor implements Sensor, Serializable {
 	}
 	
 	private boolean isMaster() {
-		return master;
+		return master || getName().isEmpty();
 	}
 	
 	private GenericSensor getMaster() {
@@ -136,7 +138,7 @@ public abstract class GenericSensor implements Sensor, Serializable {
 	
 	private ArrayList<GenericSensor> getSlaves() {
 		ArrayList<GenericSensor> slaves = new ArrayList<GenericSensor>();
-		if (isMaster()) {
+		if (isMaster() && !getName().isEmpty()) {
 			ConcurrentHashMap<Location, Sensor> list = SensorManager.getSensorList();
 			Iterator<Entry<Location, Sensor>> i = list.entrySet().iterator();
 			while (i.hasNext()) {

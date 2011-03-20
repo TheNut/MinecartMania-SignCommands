@@ -1,6 +1,7 @@
 package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,11 +12,10 @@ import org.bukkit.entity.Entity;
 import com.afforess.minecartmaniacore.Item;
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.MinecartManiaPlayer;
-import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
+import com.afforess.minecartmaniacore.config.ControlBlockList;
 import com.afforess.minecartmaniacore.utils.ChatUtils;
 import com.afforess.minecartmaniacore.utils.MathUtils;
-import com.afforess.minecartmaniacore.utils.MinecartUtils;
 import com.afforess.minecartmaniacore.utils.EntityUtils;
 import com.afforess.minecartmaniacore.utils.SignUtils;
 import com.afforess.minecartmaniacore.utils.StringUtils;
@@ -73,11 +73,11 @@ public class SignCommands {
 		return false;
 	}
 	
-	public static boolean doAutoSetting(MinecartManiaStorageCart minecart, String s) {
+	public static boolean doAutoSetting(MinecartManiaMinecart minecart, String s) {
 		return doAutoSetting(minecart, s, s, Boolean.TRUE);
 	}
 	
-	public static boolean doAutoSetting(MinecartManiaStorageCart minecart, String s, String key, Object value) {
+	public static boolean doAutoSetting(MinecartManiaMinecart minecart, String s, String key, Object value) {
 		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
 		for (Sign sign : signList) {
 			for (int i = 0; i < 4; i++) {
@@ -92,7 +92,7 @@ public class SignCommands {
 		return false;
 	}
 	
-	public static boolean doAlterCollectRange(MinecartManiaStorageCart minecart) {
+	public static boolean doAlterCollectRange(MinecartManiaMinecart minecart) {
 		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
 		for (Sign sign : signList) {
 			for (int i = 0; i < 4; i++) {
@@ -134,7 +134,7 @@ public class SignCommands {
 		if (minecart.minecart.getPassenger() == null) {
 			return false;
 		}
-		if (minecart.getBlockIdBeneath() != MinecartManiaWorld.getEjectorBlockId()) {
+		if (!ControlBlockList.isEjectorBlock(minecart.getItemBeneath())) {
 			return false;
 		}
 		if (minecart.isPoweredBeneath()) {
@@ -162,10 +162,17 @@ public class SignCommands {
 	}
 	
 	public static boolean doAnnouncementSign(MinecartManiaMinecart minecart) {
-		ArrayList<Sign> signList = SignUtils.getSignBeneathList(minecart, 2);
-		//Possibility of overlapping with sloped track, so disregard parallel signs
-		if (!MinecartUtils.isSlopedTrack(minecart.minecart.getWorld(), minecart.getX(), minecart.getY(), minecart.getZ())) {
-			signList.addAll(SignUtils.getParallelSignList(minecart));
+		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
+		ArrayList<Sign> oldSignList = SignUtils.getAdjacentSignList(minecart.getPreviousLocation().toLocation(minecart.minecart.getWorld()), 2);
+		//Prunes overlapping signs
+		for (Sign sign : oldSignList) {
+			Iterator<Sign> i = signList.iterator();
+			while(i.hasNext()) {
+				Sign s = i.next();
+				if (SignUtils.signMatches(s, sign)) {
+					i.remove();
+				}
+			}
 		}
 		for (Sign sign : signList) {
 			
@@ -338,6 +345,21 @@ public class SignCommands {
 	
 	public static void updateSensors(MinecartManiaMinecart minecart) {
 		updateSensors(minecart, minecart);
+	}
+
+	public static boolean doPassPlayer(MinecartManiaMinecart minecart) {
+		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
+		for (Sign sign : signList) {
+			for (int i = 0; i < 4; i++) {
+				if (sign.getLine(i).toLowerCase().contains("pass player")) {
+					sign.setLine(i, "[Pass Player]");
+					sign.update();
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 		
 }
