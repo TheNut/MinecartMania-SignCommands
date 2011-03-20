@@ -7,7 +7,6 @@ import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.minecartmaniacore.config.ControlBlockList;
 import com.afforess.minecartmaniacore.event.MinecartActionEvent;
 import com.afforess.minecartmaniacore.event.MinecartCaughtEvent;
 import com.afforess.minecartmaniacore.event.MinecartLaunchedEvent;
@@ -24,9 +23,6 @@ public class MinecartActionListener extends MinecartManiaListener{
 		boolean action = event.isActionTaken();
 		MinecartManiaMinecart minecart = event.getMinecart();
 		
-		if (!action && ControlBlockList.isEjectorBlock(minecart.getItemBeneath())) {
-			action = SignCommands.doHoldSign(minecart);
-		}
 		if (!action && minecart.getBlockTypeAhead() != null && minecart.getBlockTypeAhead().getState() instanceof Sign) {
 			Sign sign = (Sign)minecart.getBlockTypeAhead().getState();
 			action = SignCommands.doElevatorSign(minecart, sign);
@@ -98,6 +94,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 			event.setActionTaken(true);
 			return;
 		}
+		SignCommands.doHoldSign(event.getMinecart());
 	}
 	
 	public void onMinecartManiaMinecartCreatedEvent(MinecartManiaMinecartCreatedEvent event) {
