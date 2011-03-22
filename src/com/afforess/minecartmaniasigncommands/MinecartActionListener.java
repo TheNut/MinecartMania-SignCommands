@@ -94,7 +94,10 @@ public class MinecartActionListener extends MinecartManiaListener{
 			event.setActionTaken(true);
 			return;
 		}
-		SignCommands.doHoldSign(event.getMinecart());
+		//Block interruptions
+		if (event.getMinecart().getDataValue("hold sign data") == null) {
+			SignCommands.doHoldSign(event.getMinecart());
+		}
 	}
 	
 	public void onMinecartManiaMinecartCreatedEvent(MinecartManiaMinecartCreatedEvent event) {
