@@ -104,11 +104,13 @@ public abstract class GenericSensor implements Sensor, Serializable {
 	}
 	
 	public Block getDiode() {
-		Sign sign = getSign();
-		BlockFace back = DirectionUtils.CompassDirectionToBlockFace(DirectionUtils.getOppositeDirection(DirectionUtils.getSignFacingDirection(sign)));
-		Block diode = sign.getBlock().getFace(back);
-		if (diode.getTypeId() == Item.DIODE_BLOCK_OFF.getId() || diode.getTypeId() == Item.DIODE_BLOCK_ON.getId()) {
-			return diode;
+		if (hasSign()) {
+			Sign sign = getSign();
+			BlockFace back = DirectionUtils.CompassDirectionToBlockFace(DirectionUtils.getOppositeDirection(DirectionUtils.getSignFacingDirection(sign)));
+			Block diode = sign.getBlock().getFace(back);
+			if (diode.getTypeId() == Item.DIODE_BLOCK_OFF.getId() || diode.getTypeId() == Item.DIODE_BLOCK_ON.getId()) {
+				return diode;
+			}
 		}
 		return null;
 	}
@@ -166,6 +168,10 @@ public abstract class GenericSensor implements Sensor, Serializable {
 	@Override
 	public Sign getSign() {
 		return (Sign)sign.getBlock().getState();
+	}
+	
+	private boolean hasSign() {
+		return sign.getBlock().getState() instanceof Sign;
 	}
 	
 	@Override
