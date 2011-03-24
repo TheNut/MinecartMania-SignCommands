@@ -99,7 +99,7 @@ public class SignCommands {
 				if (sign.getLine(i).toLowerCase().contains("range")) {
 					String[] split = sign.getLine(i).split(":");
 					if (split.length != 2) continue;
-					int range = MathUtils.range(Integer.parseInt(StringUtils.getNumber(split[1])), MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("Maximum Collection Range")), 0);
+					int range = MathUtils.range(Integer.parseInt(StringUtils.getNumber(split[1])), MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("MaximumRange")), 0);
 					minecart.setEntityDetectionRange(range);
 					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
 					sign.update();
@@ -137,7 +137,10 @@ public class SignCommands {
 		if (!ControlBlockList.isEjectorBlock(minecart.getItemBeneath())) {
 			return false;
 		}
-		if (minecart.isPoweredBeneath()) {
+		if (ControlBlockList.isReqRedstone(minecart.getItemBeneath()) && !minecart.isPoweredBeneath()) {
+			return false;
+		}
+		if (ControlBlockList.isRedstoneDisables(minecart.getItemBeneath()) && minecart.isPoweredBeneath()) {
 			return false;
 		}
 		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 8);
@@ -151,8 +154,7 @@ public class SignCommands {
 					if (loc != null) {
 						Entity passenger = minecart.minecart.getPassenger();
 						minecart.minecart.eject();
-						passenger.teleportTo(loc);
-						return true;
+						return passenger.teleport(loc);
 					}
 				}
 			}
@@ -187,7 +189,7 @@ public class SignCommands {
 				sign.setLine(0, "[Announce]");
 				if (minecart.hasPlayerPassenger()){
 					
-					final String title = MinecartManiaWorld.getConfigurationValue("Announcement Sign Prefix").toString() + " " + ChatColor.WHITE;
+					final String title = MinecartManiaWorld.getConfigurationValue("AnnouncementSignPrefix").toString() + " " + ChatColor.WHITE;
 					String annoucement = title + sign.getLine(1);
 					//! signifies a new line, otherwise continue message on same line
 					if (sign.getLine(2).startsWith("!")) {
@@ -290,9 +292,7 @@ public class SignCommands {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX(), i, elevator.getZ() + 1);
 							}
 							if (nextFloor != null) {
-								
-								minecart.minecart.teleportTo(nextFloor);
-								return true;
+								return minecart.minecart.teleport(nextFloor);
 							}
 						}
 					}
