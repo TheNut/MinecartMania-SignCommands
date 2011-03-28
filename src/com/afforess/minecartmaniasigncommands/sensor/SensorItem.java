@@ -28,7 +28,7 @@ public class SensorItem extends GenericSensor{
 			}
 			else if (minecart.hasPlayerPassenger()) {
 				MinecartManiaPlayer player = MinecartManiaWorld.getMinecartManiaPlayer(minecart.getPlayerPassenger());
-				if (player.contains(this.detect)) {
+				if (player.amount(this.detect) > (detect.isInfinite() ? 0 : detect.getAmount())) {
 					state = true;
 				}
 			}

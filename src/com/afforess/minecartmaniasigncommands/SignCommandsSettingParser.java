@@ -9,6 +9,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.bukkit.ChatColor;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,7 +20,7 @@ import com.afforess.minecartmaniacore.config.MinecartManiaConfigurationParser;
 import com.afforess.minecartmaniacore.config.SettingParser;
 
 public class SignCommandsSettingParser implements SettingParser{
-	private static final double version = 1.0;
+	private static final double version = 1.1;
 	
 	public boolean isUpToDate(Document document) {
 		try {
@@ -43,6 +44,21 @@ public class SignCommandsSettingParser implements SettingParser{
 			list = document.getElementsByTagName(setting);
 			value = list.item(0).getChildNodes().item(0).getNodeValue();
 			MinecartManiaWorld.getConfiguration().put(setting, value);
+			
+			setting = "AnnouncementSignPrefixColor";
+			list = document.getElementsByTagName(setting);
+			value = parseColor(list.item(0).getChildNodes().item(0).getNodeValue());
+			MinecartManiaWorld.getConfiguration().put(setting, value);
+			
+			setting = "AnnouncementColor";
+			list = document.getElementsByTagName(setting);
+			value = parseColor(list.item(0).getChildNodes().item(0).getNodeValue());
+			MinecartManiaWorld.getConfiguration().put(setting, value);
+			
+			setting = "SensorDisabledDelay";
+			list = document.getElementsByTagName(setting);
+			value = list.item(0).getChildNodes().item(0).getNodeValue();
+			MinecartManiaWorld.getConfiguration().put(setting, MinecartManiaConfigurationParser.toInt((String) value, 8));
 		}
 		catch (Exception e) {
 			return false;
@@ -63,14 +79,38 @@ public class SignCommandsSettingParser implements SettingParser{
 			doc.appendChild(rootElement);
 			
 			Element setting = doc.createElement("version");
-			setting.appendChild(doc.createTextNode("1.0"));
+			setting.appendChild(doc.createTextNode("1.1"));
 			rootElement.appendChild(setting);
 			
 			setting = doc.createElement("AnnouncementSignPrefix");
 			Comment comment = doc.createComment("The prefix displayed before all announcement messages are displayed to the player.");
-			setting.appendChild(doc.createTextNode("§e[Announcement]"));
+			setting.appendChild(doc.createTextNode("[Announcement]"));
 			rootElement.appendChild(setting);
 			rootElement.insertBefore(comment,setting);
+			
+			setting = doc.createElement("AnnouncementSignPrefixColor");
+			String colors = "";
+			for (ChatColor c : ChatColor.values()) {
+				colors += c.name().toLowerCase() + ", "; 
+			}
+			comment = doc.createComment("The color of the prefix. Valid Colors are: \n\t" + colors);
+			setting.appendChild(doc.createTextNode("yellow"));
+			rootElement.appendChild(setting);
+			rootElement.insertBefore(comment,setting);
+			
+			setting = doc.createElement("AnnouncementColor");
+			comment = doc.createComment("The color of the message of the announcement");
+			setting.appendChild(doc.createTextNode("white"));
+			rootElement.appendChild(setting);
+			rootElement.insertBefore(comment,setting);
+			
+			
+			setting = doc.createElement("SensorDisabledDelay");
+			comment = doc.createComment("The delay (in ticks. 20 ticks = 1 second) that sensors stay active after a minecart passes");
+			setting.appendChild(doc.createTextNode("8"));
+			rootElement.appendChild(setting);
+			rootElement.insertBefore(comment,setting);
+			
 			
 			
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -83,5 +123,14 @@ public class SignCommandsSettingParser implements SettingParser{
 		}
 		catch (Exception e) { return false; }
 		return true;
+	}
+	
+	private static ChatColor parseColor(String str) {
+		for (ChatColor c : ChatColor.values()) {
+			if (c.name().equalsIgnoreCase(str)) {
+				return c;
+			}
+		}
+		return ChatColor.WHITE;
 	}
 }

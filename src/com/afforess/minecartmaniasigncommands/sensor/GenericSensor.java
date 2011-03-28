@@ -14,6 +14,7 @@ import org.bukkit.block.Sign;
 
 import com.afforess.minecartmaniacore.Item;
 import com.afforess.minecartmaniacore.MinecartManiaCore;
+import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.utils.DirectionUtils;
 
 public abstract class GenericSensor implements Sensor, Serializable {
@@ -80,7 +81,7 @@ public abstract class GenericSensor implements Sensor, Serializable {
 				}
 			}
 		};
-		MinecartManiaCore.server.getScheduler().scheduleSyncDelayedTask(MinecartManiaCore.instance, task, 8);
+		MinecartManiaCore.server.getScheduler().scheduleSyncDelayedTask(MinecartManiaCore.instance, task, MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("SensorDisabledDelay")));
 	}
 	
 	private void disable() {

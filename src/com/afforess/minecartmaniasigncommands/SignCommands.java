@@ -134,13 +134,7 @@ public class SignCommands {
 		if (minecart.minecart.getPassenger() == null) {
 			return false;
 		}
-		if (!ControlBlockList.isEjectorBlock(minecart.getItemBeneath())) {
-			return false;
-		}
-		if (ControlBlockList.isReqRedstone(minecart.getItemBeneath()) && !minecart.isPoweredBeneath()) {
-			return false;
-		}
-		if (ControlBlockList.isRedstoneDisables(minecart.getItemBeneath()) && minecart.isPoweredBeneath()) {
+		if (!ControlBlockList.isValidEjectorBlock(minecart.getBlockBeneath())) {
 			return false;
 		}
 		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 8);
@@ -189,7 +183,9 @@ public class SignCommands {
 				sign.setLine(0, "[Announce]");
 				if (minecart.hasPlayerPassenger()){
 					
-					final String title = MinecartManiaWorld.getConfigurationValue("AnnouncementSignPrefix").toString() + " " + ChatColor.WHITE;
+					final String title = MinecartManiaWorld.getConfigurationValue("AnnouncementSignPrefixColor").toString()
+						+ MinecartManiaWorld.getConfigurationValue("AnnouncementSignPrefix").toString() + " "
+						+ MinecartManiaWorld.getConfigurationValue("AnnouncementColor");
 					String annoucement = title + sign.getLine(1);
 					//! signifies a new line, otherwise continue message on same line
 					if (sign.getLine(2).startsWith("!")) {
