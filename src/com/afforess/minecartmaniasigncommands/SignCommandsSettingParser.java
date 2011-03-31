@@ -79,7 +79,7 @@ public class SignCommandsSettingParser implements SettingParser{
 			doc.appendChild(rootElement);
 			
 			Element setting = doc.createElement("version");
-			setting.appendChild(doc.createTextNode("1.1"));
+			setting.appendChild(doc.createTextNode(String.valueOf(version)));
 			rootElement.appendChild(setting);
 			
 			setting = doc.createElement("AnnouncementSignPrefix");

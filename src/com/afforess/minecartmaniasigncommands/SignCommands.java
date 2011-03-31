@@ -100,7 +100,7 @@ public class SignCommands {
 					String[] split = sign.getLine(i).split(":");
 					if (split.length != 2) continue;
 					int range = MathUtils.range(Integer.parseInt(StringUtils.getNumber(split[1])), MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("MaximumRange")), 0);
-					minecart.setEntityDetectionRange(range);
+					minecart.setRange(range);
 					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
 					sign.update();
 					return true;
@@ -145,6 +145,8 @@ public class SignCommands {
 					sign.setLine(i, "[Eject Here]");
 					sign.update();
 					Location loc = EntityUtils.getValidLocation(sign.getBlock());
+					loc.setPitch(minecart.minecart.getPassenger().getLocation().getPitch());
+					loc.setYaw(minecart.minecart.getPassenger().getLocation().getYaw());
 					if (loc != null) {
 						Entity passenger = minecart.minecart.getPassenger();
 						minecart.minecart.eject();
