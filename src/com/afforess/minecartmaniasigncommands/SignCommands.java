@@ -160,8 +160,17 @@ public class SignCommands {
 	}
 	
 	public static boolean doAnnouncementSign(MinecartManiaMinecart minecart) {
-		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
-		ArrayList<Sign> oldSignList = SignUtils.getAdjacentSignList(minecart.getPreviousLocation().toLocation(minecart.minecart.getWorld()), 2);
+		if (!minecart.isStandardMinecart() || !minecart.hasPlayerPassenger()){ 
+			return false;
+		}
+		
+		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 1);
+		signList.addAll(SignUtils.getSignBeneathList(minecart, 3));
+		
+		Location previous = minecart.getPreviousLocation().toLocation(minecart.minecart.getWorld());
+		ArrayList<Sign> oldSignList = SignUtils.getAdjacentSignList(previous, 1);
+		oldSignList.addAll(SignUtils.getSignBeneathList(previous, 3));
+		
 		//Prunes overlapping signs
 		for (Sign sign : oldSignList) {
 			Iterator<Sign> i = signList.iterator();
