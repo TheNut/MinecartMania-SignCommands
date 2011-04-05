@@ -30,7 +30,7 @@ public enum Recipes implements Recipe{
 	};
 
 	private static Item getItemWithAmount(Item item, int amt) {
-		item.setAmount(amt);
+		//item.setAmount(amt);
 		return item;
 	}
 
