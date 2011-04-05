@@ -1,8 +1,6 @@
 package com.afforess.minecartmaniasigncommands;
 
 
-import java.util.logging.Logger;
-
 import org.bukkit.Server;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -11,11 +9,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.afforess.minecartmaniacore.MinecartManiaCore;
 import com.afforess.minecartmaniacore.config.MinecartManiaConfigurationParser;
+import com.afforess.minecartmaniacore.debug.MinecartManiaLogger;
 import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
 
 public class MinecartManiaSignCommands extends JavaPlugin{
 
-	public static Logger log = Logger.getLogger("Minecraft");
+	public static MinecartManiaLogger log = MinecartManiaLogger.getInstance();
 	public static Server server;
 	public static PluginDescriptionFile description;
 	public static MinecartActionListener listener = new MinecartActionListener();
@@ -23,7 +22,7 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 	public static SignCommandsBlockListener blockListener = new SignCommandsBlockListener();
 
 	public void onDisable() {
-		log.info("[Minecart Mania] Saving Sensor Data.");
+		log.info("Saving Sensor Data.");
 		SensorManager.saveSensors();
 	}
 
@@ -41,7 +40,7 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 		Runnable loadSensors = new Runnable() {
 			public void run() {
 				 SensorManager.loadSensors();
-				 log.info("[Minecart Mania] Loading Sensor Data.");
+				 log.info("Loading Sensor Data.");
 			}
 		};
 		getServer().getScheduler().scheduleSyncDelayedTask(this, loadSensors, 20*5);
