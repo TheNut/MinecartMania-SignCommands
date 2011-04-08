@@ -2,11 +2,11 @@ package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
 
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.config.LocaleParser;
 import com.afforess.minecartmaniacore.event.MinecartActionEvent;
 import com.afforess.minecartmaniacore.event.MinecartCaughtEvent;
 import com.afforess.minecartmaniacore.event.MinecartLaunchedEvent;
@@ -15,7 +15,6 @@ import com.afforess.minecartmaniacore.event.MinecartManiaMinecartCreatedEvent;
 import com.afforess.minecartmaniacore.event.MinecartManiaMinecartDestroyedEvent;
 import com.afforess.minecartmaniacore.event.MinecartMotionStopEvent;
 import com.afforess.minecartmaniacore.event.MinecartTimeEvent;
-import com.afforess.minecartmaniacore.utils.ChatUtils;
 
 public class MinecartActionListener extends MinecartManiaListener{
 
@@ -44,9 +43,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 		SignCommands.doAutoSetting(minecart, "Unlock Cart", "Lock Cart", null);
 		Object newVal = minecart.getDataValue("Lock Cart");
 		if (oldVal != newVal && minecart.hasPlayerPassenger()) {
-			ChatUtils.sendMultilineMessage(minecart.getPlayerPassenger(), 
-				oldVal == null ? "Your Minecart Has been Locked." : "Your Minecart Has Been Unlocked",
-				oldVal == null ? ChatColor.YELLOW.toString() : ChatColor.GREEN.toString());
+			minecart.getPlayerPassenger().sendMessage(oldVal == null ? LocaleParser.getTextKey("SignCommandsMinecartLocked") : LocaleParser.getTextKey("SignCommandsMinecartUnlocked"));
 		}
 			
 		if (minecart.isStorageMinecart()) {
@@ -156,7 +153,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 		if (minecart.getDataValue("Lock Cart") != null) {
 			minecart.setDataValue("Lock Cart", null);
 			if (minecart.hasPlayerPassenger()) {
-				ChatUtils.sendMultilineMessage(minecart.getPlayerPassenger(), "Your minecart has been unlocked.", ChatColor.GREEN.toString());
+				minecart.getPlayerPassenger().sendMessage(LocaleParser.getTextKey("SignCommandsMinecartUnlocked"));
 			}
 		}
 	}

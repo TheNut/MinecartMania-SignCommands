@@ -3,7 +3,6 @@ package com.afforess.minecartmaniasigncommands;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -14,7 +13,7 @@ import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.MinecartManiaPlayer;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.config.ControlBlockList;
-import com.afforess.minecartmaniacore.utils.ChatUtils;
+import com.afforess.minecartmaniacore.config.LocaleParser;
 import com.afforess.minecartmaniacore.utils.MathUtils;
 import com.afforess.minecartmaniacore.utils.EntityUtils;
 import com.afforess.minecartmaniacore.utils.SignUtils;
@@ -64,7 +63,7 @@ public class SignCommands {
 				sign.update();
 				if (StringUtils.removeBrackets(sign.getLine(1)).equals(player.getLastStation())) {
 					minecart.stopCart();
-					ChatUtils.sendMultilineMessage(minecart.getPlayerPassenger(), "You've arrived at your destination", ChatColor.GREEN.toString());
+					minecart.getPlayerPassenger().sendMessage(LocaleParser.getTextKey("SignCommandsDestination"));
 					return true;
 				}
 			}
@@ -200,19 +199,19 @@ public class SignCommands {
 					String annoucement = title + sign.getLine(1);
 					//! signifies a new line, otherwise continue message on same line
 					if (sign.getLine(2).startsWith("!")) {
-						annoucement += " [NEWLINE] " + title + sign.getLine(2).substring(1);
+						annoucement += "\n" + title + sign.getLine(2).substring(1);
 					}
 					else {
 						annoucement += sign.getLine(2);
 					}
 					
 					if (sign.getLine(3).startsWith("!")) {
-						annoucement += " [NEWLINE] " + title + sign.getLine(3).substring(1);
+						annoucement += "\n" + title + sign.getLine(3).substring(1);
 					}
 					else {
 						annoucement += sign.getLine(3);
 					}
-					ChatUtils.sendMultilineMessage(minecart.getPlayerPassenger(), annoucement);
+					minecart.getPlayerPassenger().sendMessage(annoucement);
 				}
 			}
 		}

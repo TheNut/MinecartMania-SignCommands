@@ -1,10 +1,9 @@
 package com.afforess.minecartmaniasigncommands.sensor;
 
-import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
-import com.afforess.minecartmaniacore.utils.ChatUtils;
+import com.afforess.minecartmaniacore.config.LocaleParser;
 import com.afforess.minecartmaniacore.utils.ItemUtils;
 
 public abstract class SensorConstructor {
@@ -30,7 +29,7 @@ public abstract class SensorConstructor {
 			if (sensorType == SensorType.DETECT_ITEM) {
 				if (ItemUtils.getFirstItemStringToMaterial(sign.getLine(2)) == null) {
 					if (player != null) {
-						ChatUtils.sendMultilineWarning(player, "Item Sensors Must Have a Valid Item Name or id, On Line 3");
+						player.sendMessage(LocaleParser.getTextKey("SignCommandsSensorItemError"));
 					}
 					return null;
 				}
@@ -38,7 +37,7 @@ public abstract class SensorConstructor {
 			if (sensorType == SensorType.DETECT_PLYR_NAME) {
 				if (sign.getLine(2).trim().isEmpty()) {
 					if (player != null) {
-						ChatUtils.sendMultilineWarning(player, "Player Name Sensors Must Have The Name Of The Player To Detect, On Line 3");
+						player.sendMessage(LocaleParser.getTextKey("SignCommandsSensorPlayerNameError"));
 					}
 					return null;
 				}
@@ -67,7 +66,7 @@ public abstract class SensorConstructor {
 				case DETECT_CHICKEN: sensor = new SensorChicken(sensorType, sign, name); break;
 			}
 			if (player != null) {
-				ChatUtils.sendMultilineMessage(player, "Sensor Successfully Created", ChatColor.GREEN.toString());
+				player.sendMessage(LocaleParser.getTextKey("SignCommandsSensorSuccess"));
 			}
 			return sensor;
 		}
