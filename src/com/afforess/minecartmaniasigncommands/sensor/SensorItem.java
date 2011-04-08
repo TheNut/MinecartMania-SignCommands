@@ -22,7 +22,7 @@ public class SensorItem extends GenericSensor{
 		boolean state = false;
 		if (minecart != null) {
 			if (minecart.isStorageMinecart()) {
-				if (((MinecartManiaStorageCart)minecart).contains(this.detect.type())) {
+				if (((MinecartManiaStorageCart)minecart).amount(this.detect.type()) > (detect.isInfinite() ? 0 : detect.getAmount())) {
 					state = true;
 				}
 			}
