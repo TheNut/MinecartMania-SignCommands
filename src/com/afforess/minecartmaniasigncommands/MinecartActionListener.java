@@ -6,6 +6,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.util.Vector;
 
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
 import com.afforess.minecartmaniacore.config.LocaleParser;
 import com.afforess.minecartmaniacore.event.MinecartActionEvent;
 import com.afforess.minecartmaniacore.event.MinecartCaughtEvent;
@@ -67,6 +68,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 			SignCommands.doAutoSetting(minecart, "Plant Off", "AutoPlant", null);
 			SignCommands.doAutoSetting(minecart, "Cactus Off", "AutoCactus", null);
 			SignCommands.doAutoSetting(minecart, "ReCactus Off", "AutoCactus", null);
+			SignCommands.doAlterItemRange((MinecartManiaStorageCart)minecart);
 		}
 		
 		event.setActionTaken(action);

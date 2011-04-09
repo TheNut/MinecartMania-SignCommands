@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import com.afforess.minecartmaniacore.Item;
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.MinecartManiaPlayer;
+import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.config.ControlBlockList;
 import com.afforess.minecartmaniacore.config.LocaleParser;
@@ -100,6 +101,24 @@ public class SignCommands {
 					if (split.length != 2) continue;
 					int range = MathUtils.range(Integer.parseInt(StringUtils.getNumber(split[1])), MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("MaximumRange")), 0);
 					minecart.setRange(range);
+					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
+					sign.update();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean doAlterItemRange(MinecartManiaStorageCart minecart) {
+		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 2);
+		for (Sign sign : signList) {
+			for (int i = 0; i < 4; i++) {
+				if (sign.getLine(i).toLowerCase().contains("item range")) {
+					String[] split = sign.getLine(i).split(":");
+					if (split.length != 2) continue;
+					int range = MathUtils.range(Integer.parseInt(StringUtils.getNumber(split[1])), MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("MaximumRange")), 0);
+					minecart.setItemRange(range);
 					sign.setLine(i, StringUtils.addBrackets(sign.getLine(i)));
 					sign.update();
 					return true;
