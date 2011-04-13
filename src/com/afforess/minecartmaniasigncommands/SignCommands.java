@@ -297,6 +297,14 @@ public class SignCommands {
 
 	public static boolean doElevatorSign(MinecartManiaMinecart minecart, Sign sign) {
 		if (isElevatorSign(sign)) {
+			//get the offset of the track just after the sign in the current facing direction
+			int facingX = 0;
+			int facingZ = 0;
+			if (minecart.previousFacingDir == DirectionUtils.CompassDirection.NORTH) {facingX = -1}
+			else if (minecart.previousFacingDir == DirectionUtils.CompassDirection.EAST) {facingZ = -1}
+			else if (minecart.previousFacingDir == DirectionUtils.CompassDirection.SOUTH) {facingX = 1}
+			else if (minecart.previousFacingDir == DirectionUtils.CompassDirection.WEST) {facingZ = 1}
+
 			for (int i = 0; i < 128; i++) {
 				if (i != sign.getY()) {
 					ArrayList<Sign> signList = SignUtils.getParallelSignList(sign.getWorld(), sign.getX(), i, sign.getZ());
@@ -304,7 +312,11 @@ public class SignCommands {
 						if (isElevatorSign(elevator)) {
 							
 							Location nextFloor = null;
-							if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ()) == Item.RAILS.getId()) {
+							//give priority to the minecart current facing direction
+							if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() + facingX, i, elevator.getZ() + facingZ) == Item.RAILS.getId()) {
+								nextFloor = new Location(elevator.getWorld(), elevator.getX() + facingX, i, elevator.getZ() + facingZ);
+							}
+							else if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ()) == Item.RAILS.getId()) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ());
 							}
 							else if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() + 1, i, elevator.getZ()) == Item.RAILS.getId()) {
