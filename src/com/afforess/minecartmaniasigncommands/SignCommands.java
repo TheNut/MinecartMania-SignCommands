@@ -301,16 +301,16 @@ public class SignCommands {
 			//get the offset of the track just after the sign in the current facing direction
 			int facingX = 0;
 			int facingZ = 0;
-			if (minecart.previousFacingDir == DirectionUtils.CompassDirection.NORTH) {
+			if (minecart.getDirectionOfMotion() == DirectionUtils.CompassDirection.NORTH) {
 				facingX = -1;
 			}
-			else if (minecart.previousFacingDir == DirectionUtils.CompassDirection.SOUTH) {
+			else if (minecart.getDirectionOfMotion() == DirectionUtils.CompassDirection.SOUTH) {
 				facingX = 1;
 			}
-			else if (minecart.previousFacingDir == DirectionUtils.CompassDirection.EAST) {
+			else if (minecart.getDirectionOfMotion() == DirectionUtils.CompassDirection.EAST) {
 				facingZ = -1;
 			}
-			else if (minecart.previousFacingDir == DirectionUtils.CompassDirection.WEST) {
+			else if (minecart.getDirectionOfMotion() == DirectionUtils.CompassDirection.WEST) {
 				facingZ = 1;
 			}
 
