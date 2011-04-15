@@ -15,6 +15,7 @@ import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.config.ControlBlockList;
 import com.afforess.minecartmaniacore.config.LocaleParser;
+import com.afforess.minecartmaniacore.utils.BlockUtils;
 import com.afforess.minecartmaniacore.utils.DirectionUtils;
 import com.afforess.minecartmaniacore.utils.MathUtils;
 import com.afforess.minecartmaniacore.utils.EntityUtils;
@@ -157,6 +158,7 @@ public class SignCommands {
 			return false;
 		}
 		ArrayList<Sign> signList = SignUtils.getAdjacentSignList(minecart, 8);
+		BlockUtils.sortBlocksByDistance(minecart.minecart.getLocation(), signList);
 		for (Sign sign : signList) {
 			for (int i = 0; i < 4; i++) {
 				String line = sign.getLine(i).toLowerCase();
@@ -301,16 +303,16 @@ public class SignCommands {
 			//get the offset of the track just after the sign in the current facing direction
 			int facingX = 0;
 			int facingZ = 0;
-			if (minecart.getDirectionOfMotion() == DirectionUtils.CompassDirection.NORTH) {
+			if (minecart.getDirection() == DirectionUtils.CompassDirection.NORTH) {
 				facingX = -1;
 			}
-			else if (minecart.getDirectionOfMotion() == DirectionUtils.CompassDirection.SOUTH) {
+			else if (minecart.getDirection() == DirectionUtils.CompassDirection.SOUTH) {
 				facingX = 1;
 			}
-			else if (minecart.getDirectionOfMotion() == DirectionUtils.CompassDirection.EAST) {
+			else if (minecart.getDirection() == DirectionUtils.CompassDirection.EAST) {
 				facingZ = -1;
 			}
-			else if (minecart.getDirectionOfMotion() == DirectionUtils.CompassDirection.WEST) {
+			else if (minecart.getDirection() == DirectionUtils.CompassDirection.WEST) {
 				facingZ = 1;
 			}
 
