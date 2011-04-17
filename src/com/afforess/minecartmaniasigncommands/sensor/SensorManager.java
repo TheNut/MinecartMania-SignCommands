@@ -50,6 +50,9 @@ public class SensorManager {
 	}
 	 
 	 public static boolean verifySensor(Sign sign, Sensor sensor) {
+		 if (sign.getLine(0).split(":").length != 2) {
+			 return false;
+		 }
 		 if (!sign.getLine(0).split(":")[1].trim().equals(sensor.getType().getType())) {
 			 return false;
 		 }
