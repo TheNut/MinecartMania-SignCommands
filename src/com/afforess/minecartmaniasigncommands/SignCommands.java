@@ -8,7 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 
-import com.afforess.minecartmaniacore.Item;
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.MinecartManiaPlayer;
 import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
@@ -19,6 +18,7 @@ import com.afforess.minecartmaniacore.utils.BlockUtils;
 import com.afforess.minecartmaniacore.utils.DirectionUtils;
 import com.afforess.minecartmaniacore.utils.MathUtils;
 import com.afforess.minecartmaniacore.utils.EntityUtils;
+import com.afforess.minecartmaniacore.utils.MinecartUtils;
 import com.afforess.minecartmaniacore.utils.SignUtils;
 import com.afforess.minecartmaniacore.utils.StringUtils;
 import com.afforess.minecartmaniasigncommands.sensor.Sensor;
@@ -322,21 +322,21 @@ public class SignCommands {
 					for (Sign elevator : signList) {
 						if (isElevatorSign(elevator)) {
 							
-							Location nextFloor = null;
+							Location nextFloor = new Location(elevator.getWorld(), elevator.getX() + facingX, i, elevator.getZ() + facingZ);
 							//give priority to the minecart current facing direction
-							if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() + facingX, i, elevator.getZ() + facingZ) == Item.RAILS.getId()) {
+							if (MinecartUtils.isTrack(MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() + facingX, i, elevator.getZ() + facingZ))) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX() + facingX, i, elevator.getZ() + facingZ);
 							}
-							else if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ()) == Item.RAILS.getId()) {
+							else if (MinecartUtils.isTrack(MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ()))) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX() - 1, i, elevator.getZ());
 							}
-							else if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() + 1, i, elevator.getZ()) == Item.RAILS.getId()) {
+							else if (MinecartUtils.isTrack(MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX() + 1, i, elevator.getZ()))) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX() + 1, i, elevator.getZ());
 							}
-							else if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() - 1) == Item.RAILS.getId()) {
+							else if (MinecartUtils.isTrack(MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() - 1))) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX(), i, elevator.getZ() - 1);
 							}
-							else if (MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() + 1) == Item.RAILS.getId()) {
+							else if (MinecartUtils.isTrack(MinecartManiaWorld.getBlockIdAt(elevator.getWorld(), elevator.getX(), i, elevator.getZ() + 1))) {
 								nextFloor = new Location(elevator.getWorld(), elevator.getX(), i, elevator.getZ() + 1);
 							}
 							if (nextFloor != null) {

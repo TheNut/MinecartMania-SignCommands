@@ -18,6 +18,7 @@ import org.w3c.dom.NodeList;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.config.MinecartManiaConfigurationParser;
 import com.afforess.minecartmaniacore.config.SettingParser;
+import com.afforess.minecartmaniacore.debug.MinecartManiaLogger;
 
 public class SignCommandsSettingParser implements SettingParser{
 	private static final double version = 1.1;
@@ -40,20 +41,25 @@ public class SignCommandsSettingParser implements SettingParser{
 		String setting;
 		
 		try {
-			setting = "AnnouncementSignPrefix";
-			list = document.getElementsByTagName(setting);
-			value = list.item(0).getChildNodes().item(0).getNodeValue();
-			MinecartManiaWorld.getConfiguration().put(setting, value);
-			
-			setting = "AnnouncementSignPrefixColor";
-			list = document.getElementsByTagName(setting);
-			value = parseColor(list.item(0).getChildNodes().item(0).getNodeValue());
-			MinecartManiaWorld.getConfiguration().put(setting, value);
-			
-			setting = "AnnouncementColor";
-			list = document.getElementsByTagName(setting);
-			value = parseColor(list.item(0).getChildNodes().item(0).getNodeValue());
-			MinecartManiaWorld.getConfiguration().put(setting, value);
+			try {
+				setting = "AnnouncementSignPrefix";
+				list = document.getElementsByTagName(setting);
+				value = list.item(0).getChildNodes().item(0).getNodeValue();
+				MinecartManiaWorld.getConfiguration().put(setting, value);
+				
+				setting = "AnnouncementSignPrefixColor";
+				list = document.getElementsByTagName(setting);
+				value = parseColor(list.item(0).getChildNodes().item(0).getNodeValue());
+				MinecartManiaWorld.getConfiguration().put(setting, value);
+				
+				setting = "AnnouncementColor";
+				list = document.getElementsByTagName(setting);
+				value = parseColor(list.item(0).getChildNodes().item(0).getNodeValue());
+				MinecartManiaWorld.getConfiguration().put(setting, value);
+			}
+			catch (Exception e) {
+				MinecartManiaLogger.getInstance().info("Empty Or Missing Announcement Sign Information. Is this intentional?");
+			}
 			
 			setting = "SensorDisabledDelay";
 			list = document.getElementsByTagName(setting);
