@@ -1,31 +1,28 @@
 package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Entity;
-
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.minecartmaniacore.MinecartManiaPlayer;
-import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
-import com.afforess.minecartmaniacore.MinecartManiaWorld;
-import com.afforess.minecartmaniacore.config.ControlBlockList;
-import com.afforess.minecartmaniacore.config.LocaleParser;
-import com.afforess.minecartmaniacore.utils.BlockUtils;
-import com.afforess.minecartmaniacore.utils.DirectionUtils;
-import com.afforess.minecartmaniacore.utils.MathUtils;
-import com.afforess.minecartmaniacore.utils.EntityUtils;
-import com.afforess.minecartmaniacore.utils.MinecartUtils;
 import com.afforess.minecartmaniacore.utils.SignUtils;
-import com.afforess.minecartmaniacore.utils.StringUtils;
 import com.afforess.minecartmaniasigncommands.sensor.Sensor;
 import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
+import com.afforess.minecartmaniasigncommands.sign.EjectionAction;
 
 public class SignCommands {
 	
+	public static void executeSignCommands(MinecartManiaMinecart minecart) {
+		ArrayList<com.afforess.minecartmaniacore.signs.Sign> list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 2);
+		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
+			sign.executeActions(minecart);
+		}
+		//Special Case
+		list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 8);
+		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
+			sign.executeAction(minecart, EjectionAction.class);
+		}
+	}
+/*	
 	public static boolean doStationSign(MinecartManiaMinecart minecart) {
 		if (!minecart.hasPlayerPassenger()) {
 			return false;
@@ -348,7 +345,7 @@ public class SignCommands {
 			}
 		}
 		return false;
-	}
+	}*/
 	
 	public static void updateSensors(MinecartManiaMinecart minecart, MinecartManiaMinecart input) {
 		

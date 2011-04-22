@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -17,6 +20,8 @@ import com.afforess.minecartmaniacore.MinecartManiaCore;
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.utils.DirectionUtils;
 
+@Entity()
+@Table(name = "sensors")
 public abstract class GenericSensor implements Sensor, Serializable {
 	private static final long serialVersionUID = 73660042031252094L;
 	protected boolean state = false;

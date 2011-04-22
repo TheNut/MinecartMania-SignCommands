@@ -44,7 +44,6 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 			}
 		};
 		getServer().getScheduler().scheduleSyncDelayedTask(this, loadSensors, 20*5);
-
 		log.info( description.getName() + " version " + description.getVersion() + " is enabled!" );
 	}
 }

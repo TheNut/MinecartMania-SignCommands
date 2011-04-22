@@ -1,5 +1,5 @@
 name: MinecartManiaSignCommands
 main: com.afforess.minecartmaniasigncommands.MinecartManiaSignCommands
-version: 1.09b
+version: 1.10_beta1
 author: Afforess
 depend: [MinecartManiaCore]
