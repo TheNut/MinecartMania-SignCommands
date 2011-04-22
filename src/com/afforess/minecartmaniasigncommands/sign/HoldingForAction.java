@@ -25,6 +25,9 @@ public class HoldingForAction implements SignAction{
 				this.line = i;
 			}
 		}
+		if (time != -1) {
+			sign.addBrackets();
+		}
 	}
 
 	@Override
