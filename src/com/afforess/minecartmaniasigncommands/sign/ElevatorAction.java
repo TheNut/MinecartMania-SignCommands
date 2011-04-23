@@ -44,9 +44,6 @@ public class ElevatorAction implements SignAction{
 		for (int i = 0; i < 128; i++) {
 			if (i != this.sign.getY()) {
 				search.setY(i);
-				if (search.getBlock().getTypeId() != 0) {
-					System.out.println(search.getBlock().getType());
-				}
 				Sign temp = SignManager.getSignAt(search);
 				if (temp != null) {
 					if (temp.hasSignAction(ElevatorAction.class)) {

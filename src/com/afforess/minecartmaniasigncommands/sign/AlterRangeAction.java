@@ -11,6 +11,7 @@ import com.afforess.minecartmaniacore.utils.StringUtils;
 public class AlterRangeAction implements SignAction{
 	protected int range;
 	protected boolean itemRange = false;
+	protected boolean rangeY = false;
 	public AlterRangeAction(Sign sign) {
 		
 		for (String line : sign.getLines()) {
@@ -20,6 +21,7 @@ public class AlterRangeAction implements SignAction{
 				this.range = Integer.parseInt(StringUtils.getNumber(split[1]));
 				this.range = MathUtils.range(this.range, MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("MaximumRange")), 0);
 				this.itemRange = line.toLowerCase().contains("item range");
+				this.rangeY = line.toLowerCase().contains("rangey");
 				sign.addBrackets();
 				break;
 			}
@@ -33,6 +35,9 @@ public class AlterRangeAction implements SignAction{
 				((MinecartManiaStorageCart)minecart).setItemRange(this.range);
 				return true;
 			}
+		}
+		else if (rangeY) {
+			minecart.setRangeY(this.range);
 		}
 		else {
 			minecart.setRange(this.range);
