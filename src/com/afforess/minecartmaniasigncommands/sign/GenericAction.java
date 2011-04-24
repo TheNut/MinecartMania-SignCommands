@@ -43,4 +43,14 @@ public class GenericAction implements SignAction{
 		return false;
 	}
 
+	@Override
+	public String getName() {
+		return setting.toLowerCase() + "sign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return setting + " Sign";
+	}
+
 }

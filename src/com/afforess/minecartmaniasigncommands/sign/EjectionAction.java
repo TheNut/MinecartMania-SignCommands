@@ -49,4 +49,14 @@ public class EjectionAction implements SignAction{
 		return false;
 	}
 
+	@Override
+	public String getName() {
+		return "ejectionsign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Ejection Sign";
+	}
+
 }

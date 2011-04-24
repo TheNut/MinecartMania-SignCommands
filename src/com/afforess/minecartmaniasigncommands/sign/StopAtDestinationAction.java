@@ -47,4 +47,14 @@ public class StopAtDestinationAction implements SignAction{
 		return station != null;
 	}
 
+	@Override
+	public String getName() {
+		return "stopatdestinationsign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Stop At Destination Sign";
+	}
+
 }

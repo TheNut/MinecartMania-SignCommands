@@ -61,4 +61,14 @@ public class AlterRangeAction implements SignAction{
 		return false;
 	}
 
+	@Override
+	public String getName() {
+		return "alterrangesign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Alter Range Sign";
+	}
+
 }

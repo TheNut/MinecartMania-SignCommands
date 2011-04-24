@@ -2,8 +2,6 @@ package com.afforess.minecartmaniasigncommands.sign;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.block.CraftSign;
-
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.signs.Sign;
 import com.afforess.minecartmaniacore.signs.SignAction;
@@ -81,7 +79,7 @@ public class ElevatorAction implements SignAction{
 	@Override
 	public boolean execute(MinecartManiaMinecart minecart) {
 		Block ahead = minecart.getBlockTypeAhead();
-		if (ahead != null && ahead.getState() instanceof CraftSign) {
+		if (ahead != null && ahead.getState() instanceof org.bukkit.block.Sign) {
 			Location teleport = calculateElevatorStop(minecart);
 			if (teleport != null) {
 				minecart.minecart.teleport(teleport);
@@ -106,6 +104,16 @@ public class ElevatorAction implements SignAction{
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public String getName() {
+		return "elevatorsign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Elevator Sign";
 	}
 
 }

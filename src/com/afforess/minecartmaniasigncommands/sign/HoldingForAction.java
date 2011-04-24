@@ -21,6 +21,9 @@ public class HoldingForAction implements SignAction{
 			if (sign.getLine(i).toLowerCase().contains("hold for")) {
 				this.time = Double.valueOf(StringUtils.getNumber(sign.getLine(i))).intValue();
 			}
+			else if (this.line == -1 && sign.getLine(i).contains("[Holding For")) {
+				this.line = i;
+			}
 			else if (this.line == -1 && sign.getLine(i).trim().isEmpty()) {
 				this.line = i;
 			}
@@ -53,6 +56,16 @@ public class HoldingForAction implements SignAction{
 	@Override
 	public boolean valid(Sign sign) {
 		return time != -1;
+	}
+
+	@Override
+	public String getName() {
+		return "holdingsign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Holding Sign";
 	}
 
 }

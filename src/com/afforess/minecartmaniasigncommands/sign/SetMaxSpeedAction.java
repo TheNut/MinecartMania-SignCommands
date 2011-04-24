@@ -40,4 +40,14 @@ public class SetMaxSpeedAction implements SignAction {
 		return this.percent > 0;
 	}
 
+	@Override
+	public String getName() {
+		return "maxspeedsign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Max Speed Sign";
+	}
+
 }
