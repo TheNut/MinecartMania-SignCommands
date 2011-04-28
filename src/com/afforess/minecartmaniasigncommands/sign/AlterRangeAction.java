@@ -9,7 +9,7 @@ import com.afforess.minecartmaniacore.utils.MathUtils;
 import com.afforess.minecartmaniacore.utils.StringUtils;
 
 public class AlterRangeAction implements SignAction{
-	protected int range;
+	protected int range = -1;
 	protected boolean itemRange = false;
 	protected boolean rangeY = false;
 	public AlterRangeAction(Sign sign) {
@@ -18,8 +18,13 @@ public class AlterRangeAction implements SignAction{
 			if (line.toLowerCase().contains("range")) {
 				String[] split = line.split(":");
 				if (split.length != 2) continue;
-				this.range = Integer.parseInt(StringUtils.getNumber(split[1]));
-				this.range = MathUtils.range(this.range, MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("MaximumRange")), 0);
+				try {
+					this.range = Integer.parseInt(StringUtils.getNumber(split[1]));
+					this.range = MathUtils.range(this.range, MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("MaximumRange")), 0);
+				}
+				catch (Exception e) {
+					this.range = -1;
+				}
 				this.itemRange = line.toLowerCase().contains("item range");
 				this.rangeY = line.toLowerCase().contains("rangey");
 				sign.addBrackets();
@@ -53,12 +58,7 @@ public class AlterRangeAction implements SignAction{
 	
 	@Override
 	public boolean valid(Sign sign) {
-		for (String line : sign.getLines()) {
-			if (line.toLowerCase().contains("range") && line.contains(":")) {
-				return true;
-			}
-		}
-		return false;
+		return this.range != -1;
 	}
 
 	@Override

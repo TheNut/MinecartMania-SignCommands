@@ -19,7 +19,11 @@ public class HoldingForAction implements SignAction{
 		
 		for (int i = 0; i < sign.getNumLines(); i++) {
 			if (sign.getLine(i).toLowerCase().contains("hold for")) {
-				this.time = Double.valueOf(StringUtils.getNumber(sign.getLine(i))).intValue();
+				try {
+					this.time = Double.valueOf(StringUtils.getNumber(sign.getLine(i))).intValue();
+				}
+				catch (Exception e) {
+				}
 			}
 			else if (this.line == -1 && sign.getLine(i).contains("[Holding For")) {
 				this.line = i;
@@ -35,10 +39,14 @@ public class HoldingForAction implements SignAction{
 
 	@Override
 	public boolean execute(MinecartManiaMinecart minecart) {
+		if (minecart.getDataValue("HoldForDelay") != null) {
+			return false;
+		}
 		if (ControlBlockList.isCatcherBlock(minecart.getItemBeneath())) {
 			HoldSignData data = new HoldSignData(time, line, sign, minecart.minecart.getVelocity());
 			minecart.stopCart();
 			minecart.setDataValue("hold sign data", data);
+			minecart.setDataValue("HoldForDelay", true);
 			if (line != -1) {
 				Sign sign = SignManager.getSignAt(this.sign);
 				sign.setLine(line, String.format("[Holding For %d]", time));

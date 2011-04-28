@@ -27,6 +27,8 @@ public class EjectionAction implements SignAction{
 		Location location = EntityUtils.getValidLocation(this.sign.getBlock());
 		if (location != null) {
 			Entity passenger = minecart.minecart.getPassenger();
+			location.setPitch(passenger.getLocation().getPitch());
+			location.setYaw(passenger.getLocation().getYaw());
 			minecart.minecart.eject();
 			return passenger.teleport(location);
 		}
