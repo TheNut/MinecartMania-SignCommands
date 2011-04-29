@@ -13,6 +13,7 @@ public class UnlockCartAction extends GenericAction{
 	public boolean execute(MinecartManiaMinecart minecart) {
 		if (minecart.hasPlayerPassenger()) {
 			if (minecart.getDataValue(this.key) != null) {
+				minecart.setDataValue(this.key, null);
 				minecart.getPlayerPassenger().sendMessage(LocaleParser.getTextKey("SignCommandsMinecartUnlocked"));
 			}
 		}

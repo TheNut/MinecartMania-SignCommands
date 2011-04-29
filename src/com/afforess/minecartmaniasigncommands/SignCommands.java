@@ -9,22 +9,8 @@ import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.utils.SignUtils;
 import com.afforess.minecartmaniasigncommands.sensor.Sensor;
 import com.afforess.minecartmaniasigncommands.sensor.SensorManager;
-import com.afforess.minecartmaniasigncommands.sign.EjectionAction;
 
 public class SignCommands {
-	
-	public static void executeSignCommands(MinecartManiaMinecart minecart) {
-		ArrayList<com.afforess.minecartmaniacore.signs.Sign> list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 2);
-		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
-			sign.executeActions(minecart);
-		}
-		//Special Case
-		list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 8);
-		SignUtils.sortByDistance(minecart.getLocation(), list);
-		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
-			sign.executeAction(minecart, EjectionAction.class);
-		}
-	}
 
 	public static void updateSensors(MinecartManiaMinecart minecart, MinecartManiaMinecart input) {
 		
