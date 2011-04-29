@@ -31,4 +31,14 @@ public class PassPlayerAction implements SignAction{
 		return false;
 	}
 
+	@Override
+	public String getName() {
+		return "passplayersign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Pass Player Sign";
+	}
+
 }

@@ -91,4 +91,14 @@ public class AnnouncementAction implements SignAction{
 		return false;
 	}
 
+	@Override
+	public String getName() {
+		return "announcementsign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Announcement Sign";
+	}
+
 }

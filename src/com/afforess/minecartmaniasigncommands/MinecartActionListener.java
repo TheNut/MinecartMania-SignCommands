@@ -20,58 +20,9 @@ import com.afforess.minecartmaniasigncommands.sign.SignType;
 public class MinecartActionListener extends MinecartManiaListener{
 
 	public void onMinecartActionEvent(MinecartActionEvent event) {
-		//boolean action = event.isActionTaken();
+
 		MinecartManiaMinecart minecart = event.getMinecart();
-		/*
-		if (!action && minecart.getBlockTypeAhead() != null && minecart.getBlockTypeAhead().getState() instanceof Sign) {
-			Sign sign = (Sign)minecart.getBlockTypeAhead().getState();
-			action = SignCommands.doElevatorSign(minecart, sign);
-		}
-		if (!action) {
-			action = SignCommands.doEjectionSign(minecart);
-		}
-		if (!action) {
-			action = SignCommands.doStationSign(minecart);
-		}
-		
-		SignCommands.doAnnouncementSign(minecart);
-		SignCommands.doMaxSpeedSign(minecart);
-		SignCommands.doStopAtDestination(minecart);
-		SignCommands.doAlterCollectRange(minecart);
-		
-		Object oldVal = minecart.getDataValue("Lock Cart");
-		SignCommands.doAutoSetting(minecart, "Lock Cart");
-		SignCommands.doAutoSetting(minecart, "Unlock Cart", "Lock Cart", null);
-		Object newVal = minecart.getDataValue("Lock Cart");
-		if (oldVal != newVal && minecart.hasPlayerPassenger()) {
-			minecart.getPlayerPassenger().sendMessage(oldVal == null ? LocaleParser.getTextKey("SignCommandsMinecartLocked") : LocaleParser.getTextKey("SignCommandsMinecartUnlocked"));
-		}
-			
-		if (minecart.isStorageMinecart()) {
-			SignCommands.doAutoSetting(minecart, "AutoSeed");
-			SignCommands.doAutoSetting(minecart, "AutoHarvest");
-			SignCommands.doAutoSetting(minecart, "AutoTill");
-			SignCommands.doAutoSetting(minecart, "AutoTimber");
-			SignCommands.doAutoSetting(minecart, "AutoForest");
-			SignCommands.doAutoSetting(minecart, "AutoFertilize");
-			SignCommands.doAutoSetting(minecart, "AutoSugar");
-			SignCommands.doAutoSetting(minecart, "AutoPlant");
-			SignCommands.doAutoSetting(minecart, "AutoCactus");
-			SignCommands.doAutoSetting(minecart, "AutoReCactus");
-			SignCommands.doAutoSetting(minecart, "Seed Off", "AutoSeed", null);
-			SignCommands.doAutoSetting(minecart, "Harvest Off", "AutoHarvest", null);
-			SignCommands.doAutoSetting(minecart, "Till Off", "AutoTill", null);
-			SignCommands.doAutoSetting(minecart, "Timber Off", "AutoTimber", null);
-			SignCommands.doAutoSetting(minecart, "Forest Off", "AutoForest", null);
-			SignCommands.doAutoSetting(minecart, "Fertilize Off", "AutoFertilize", null);
-			SignCommands.doAutoSetting(minecart, "Sugar Off", "AutoSugar", null);
-			SignCommands.doAutoSetting(minecart, "Plant Off", "AutoPlant", null);
-			SignCommands.doAutoSetting(minecart, "Cactus Off", "AutoCactus", null);
-			SignCommands.doAutoSetting(minecart, "ReCactus Off", "AutoCactus", null);
-			SignCommands.doAlterItemRange((MinecartManiaStorageCart)minecart);
-		}
-		
-		event.setActionTaken(action);*/
+		minecart.setDataValue("HoldForDelay", null);
 		SignCommands.executeSignCommands(minecart);
 		SignCommands.updateSensors(minecart);
 	}

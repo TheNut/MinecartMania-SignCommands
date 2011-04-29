@@ -2,6 +2,7 @@ package com.afforess.minecartmaniasigncommands.sign;
 
 import java.lang.reflect.Constructor;
 
+import com.afforess.minecartmaniacore.debug.MinecartManiaLogger;
 import com.afforess.minecartmaniacore.signs.Sign;
 import com.afforess.minecartmaniacore.signs.SignAction;
 
@@ -87,6 +88,8 @@ public enum SignType {
 			}
 			return action;
 		} catch (Exception e) {
+			MinecartManiaLogger.getInstance().severe("Failed to read sign!");
+			MinecartManiaLogger.getInstance().severe("Sign was :" + this.action);
 			e.printStackTrace();
 		}
 		return null;

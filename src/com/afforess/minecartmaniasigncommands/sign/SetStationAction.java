@@ -41,4 +41,14 @@ public class SetStationAction implements SignAction{
 		return station != null;
 	}
 
+	@Override
+	public String getName() {
+		return "setstationsign";
+	}
+
+	@Override
+	public String getFriendlyName() {
+		return "Set Station Sign";
+	}
+
 }
