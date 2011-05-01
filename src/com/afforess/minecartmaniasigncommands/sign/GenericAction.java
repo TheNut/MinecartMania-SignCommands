@@ -3,6 +3,7 @@ package com.afforess.minecartmaniasigncommands.sign;
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.signs.Sign;
 import com.afforess.minecartmaniacore.signs.SignAction;
+import com.afforess.minecartmaniacore.utils.StringUtils;
 
 public class GenericAction implements SignAction{
 	protected String setting = null;
@@ -45,7 +46,7 @@ public class GenericAction implements SignAction{
 
 	@Override
 	public String getName() {
-		return setting.toLowerCase() + "sign";
+		return StringUtils.removeWhitespace(setting.toLowerCase()) + "sign";
 	}
 
 	@Override

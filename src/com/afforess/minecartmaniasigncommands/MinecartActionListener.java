@@ -1,6 +1,10 @@
 package com.afforess.minecartmaniasigncommands;
 
+import java.util.ArrayList;
+
 import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.config.ControlBlock;
+import com.afforess.minecartmaniacore.config.ControlBlockList;
 import com.afforess.minecartmaniacore.config.LocaleParser;
 import com.afforess.minecartmaniacore.event.MinecartActionEvent;
 import com.afforess.minecartmaniacore.event.MinecartCaughtEvent;
@@ -14,16 +18,31 @@ import com.afforess.minecartmaniacore.event.MinecartMotionStopEvent;
 import com.afforess.minecartmaniacore.event.MinecartTimeEvent;
 import com.afforess.minecartmaniacore.signs.SignAction;
 import com.afforess.minecartmaniacore.signs.SignManager;
+import com.afforess.minecartmaniacore.utils.SignUtils;
+import com.afforess.minecartmaniasigncommands.sign.EjectionAction;
 import com.afforess.minecartmaniasigncommands.sign.HoldSignData;
 import com.afforess.minecartmaniasigncommands.sign.SignType;
 
 public class MinecartActionListener extends MinecartManiaListener{
 
 	public void onMinecartActionEvent(MinecartActionEvent event) {
-
 		MinecartManiaMinecart minecart = event.getMinecart();
 		minecart.setDataValue("HoldForDelay", null);
-		SignCommands.executeSignCommands(minecart);
+		
+		ArrayList<com.afforess.minecartmaniacore.signs.Sign> list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 2);
+		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
+			sign.executeActions(minecart);
+		}
+		//Special Case
+		ControlBlock cb = ControlBlockList.getControlBlock(minecart.getItemBeneath());
+		if (cb != null && cb.isEjectorBlock()) {
+			list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 8);
+			SignUtils.sortByDistance(minecart.getLocation(), list);
+			for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
+				sign.executeAction(minecart, EjectionAction.class);
+			}
+		}
+		
 		SignCommands.updateSensors(minecart);
 	}
 	
@@ -45,10 +64,6 @@ public class MinecartActionListener extends MinecartManiaListener{
 			event.setActionTaken(true);
 			return;
 		}
-		//Block interruptions
-		//if (event.getMinecart().getDataValue("hold sign data") == null) {
-		//	SignCommands.doHoldSign(event.getMinecart());
-		//}
 	}
 	
 	public void onMinecartManiaMinecartCreatedEvent(MinecartManiaMinecartCreatedEvent event) {
@@ -86,7 +101,6 @@ public class MinecartActionListener extends MinecartManiaListener{
 			else {
 				minecart.setDataValue("hold sign data", data);
 			}
-			
 		}
 	}
 	
