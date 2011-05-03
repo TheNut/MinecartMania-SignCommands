@@ -30,7 +30,7 @@ public class SignCommandsSettingParser implements SettingParser{
 		try {
 			NodeList list = document.getElementsByTagName("version");
 			Double version = MinecartManiaConfigurationParser.toDouble(list.item(0).getChildNodes().item(0).getNodeValue(), 0);
-			log.debug("Core Config read: version: " + list.item(0).getTextContent());
+			log.debug("Sign Commands Config read: version: " + list.item(0).getTextContent());
 			if (version == 1.0) {
 				//Place the code to update to the next version here
 				//version = 1.1;	//This needs to be updated to the next version of the document.
