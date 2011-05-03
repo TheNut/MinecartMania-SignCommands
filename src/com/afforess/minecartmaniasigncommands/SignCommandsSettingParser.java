@@ -1,6 +1,7 @@
 package com.afforess.minecartmaniasigncommands;
 
 import java.io.File;
+import java.util.Enumeration;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -13,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.afforess.minecartmaniacore.MinecartManiaWorld;
@@ -22,11 +24,19 @@ import com.afforess.minecartmaniacore.debug.MinecartManiaLogger;
 
 public class SignCommandsSettingParser implements SettingParser{
 	private static final double version = 1.1;
-	
+	private static MinecartManiaLogger log = MinecartManiaLogger.getInstance();
+
 	public boolean isUpToDate(Document document) {
 		try {
 			NodeList list = document.getElementsByTagName("version");
 			Double version = MinecartManiaConfigurationParser.toDouble(list.item(0).getChildNodes().item(0).getNodeValue(), 0);
+			log.debug("Core Config read: version: " + list.item(0).getTextContent());
+			if (version == 1.0) {
+				//Place the code to update to the next version here
+				//version = 1.1;	//This needs to be updated to the next version of the document.
+				//list.item(0).setTextContent(version.toString());
+
+			}
 			return version == SignCommandsSettingParser.version;
 		}
 		catch (Exception e) {
@@ -36,94 +46,124 @@ public class SignCommandsSettingParser implements SettingParser{
 
 	@Override
 	public boolean read(Document document) {
-		Object value;
+		//Set the default configuration before we try to read anything.
+		setDefaultConfiguration();
+
 		NodeList list;
-		String setting;
-		
 		try {
-			try {
-				setting = "AnnouncementSignPrefix";
-				list = document.getElementsByTagName(setting);
-				value = list.item(0).getChildNodes().item(0).getNodeValue();
-				MinecartManiaWorld.getConfiguration().put(setting, value);
-				
-				setting = "AnnouncementSignPrefixColor";
-				list = document.getElementsByTagName(setting);
-				value = parseColor(list.item(0).getChildNodes().item(0).getNodeValue());
-				MinecartManiaWorld.getConfiguration().put(setting, value);
-				
-				setting = "AnnouncementColor";
-				list = document.getElementsByTagName(setting);
-				value = parseColor(list.item(0).getChildNodes().item(0).getNodeValue());
-				MinecartManiaWorld.getConfiguration().put(setting, value);
+			list = document.getElementsByTagName("MinecartManiaConfiguration").item(0).getChildNodes();	//get the root nodes of the ConfigurationTree
+			String elementChildName = "";		//holds the name of the node
+			String elementChildValue = "";		//holds the value of the node
+			//loop through each of the child nodes of the document
+			for (int idx = 0; idx < list.getLength(); idx++) {
+				Node elementChild = list.item(idx);	//extract the node
+				elementChildName = "";				//reset the child name
+				elementChildValue = null;			//reset the child value
+				//do we have a valid element node
+				if (elementChild.getNodeType() == Node.ELEMENT_NODE) {
+					elementChildName = elementChild.getNodeName();	//get the node name
+					elementChildValue = elementChild.getTextContent(); //get the node value
+					if (elementChildValue != null && elementChildValue != "") {
+						//Handle the possible nodes we have at this level.
+						if (elementChildName == "version") {
+							if (elementChildValue != String.valueOf(version)) { /* documentUpgrade(document); */ }
+						} else if (elementChildName == "AnnouncementSignPrefix") {
+							MinecartManiaWorld.getConfiguration().put(elementChildName, elementChildValue);
+							log.debug("Sign Commands Config read: " + elementChildName + " = " + elementChildValue);
+						} else if (elementChildName == "AnnouncementSignPrefixColor"
+								|| elementChildName == "AnnouncementColor"
+								) {
+							MinecartManiaWorld.getConfiguration().put(elementChildName, parseColor(elementChildValue));
+							log.debug("Sign Commands Config read: " + elementChildName + " = " + elementChildValue);
+						} else if (elementChildName == "SensorDisabledDelay") {
+							MinecartManiaWorld.getConfiguration().put(elementChildName, MinecartManiaConfigurationParser.toInt(elementChildValue, 8));
+							log.debug("Sign Commands Config read: " + elementChildName + " = " + elementChildValue);
+						} else {
+							log.info("Sign Commands Config read unknown node: " + elementChildName);
+						}
+					}
+				}
 			}
-			catch (Exception e) {
-				MinecartManiaLogger.getInstance().info("Empty Or Missing Announcement Sign Information. Is this intentional?");
-			}
-			
-			setting = "SensorDisabledDelay";
-			list = document.getElementsByTagName(setting);
-			value = list.item(0).getChildNodes().item(0).getNodeValue();
-			MinecartManiaWorld.getConfiguration().put(setting, MinecartManiaConfigurationParser.toInt((String) value, 8));
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
-		
+		debugShowConfigs();
 		return true;
 	}
 
-	@Override
-	public boolean write(File configuration) {
-		try {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-			//root elements
-			Document doc = docBuilder.newDocument();
-			doc.setXmlStandalone(true);
-			Element rootElement = doc.createElement("MinecartManiaConfiguration");
-			doc.appendChild(rootElement);
-			
-			Element setting = doc.createElement("version");
-			setting.appendChild(doc.createTextNode(String.valueOf(version)));
-			rootElement.appendChild(setting);
-			
-			setting = doc.createElement("AnnouncementSignPrefix");
-			Comment comment = doc.createComment("The prefix displayed before all announcement messages are displayed to the player.");
-			setting.appendChild(doc.createTextNode("[Announcement]"));
-			rootElement.appendChild(setting);
-			rootElement.insertBefore(comment,setting);
-			
-			setting = doc.createElement("AnnouncementSignPrefixColor");
-			String colors = "";
-			for (ChatColor c : ChatColor.values()) {
-				colors += c.name().toLowerCase() + ", "; 
+	private void setDefaultConfiguration() {
+		//Create the default Configuration values
+		MinecartManiaWorld.getConfiguration().put("AnnouncementSignPrefix",			"[Announcement]");
+		MinecartManiaWorld.getConfiguration().put("AnnouncementSignPrefixColor",	"yellow");
+		MinecartManiaWorld.getConfiguration().put("AnnouncementColor",				"white");
+		MinecartManiaWorld.getConfiguration().put("SensorDisabledDelay",			8);
+	}
+
+	private void debugShowConfigs() {
+		//Display global configuration values
+		for (Enumeration<String> ConfigKeys = MinecartManiaWorld.getConfiguration().keys(); ConfigKeys.hasMoreElements();) {
+			String temp = ConfigKeys.nextElement();
+			String value = MinecartManiaWorld.getConfigurationValue(temp).toString();
+			if     (temp == "AnnouncementSignPrefix"
+				 || temp == "AnnouncementSignPrefixColor"
+				 || temp == "AnnouncementColor"
+				 || temp == "SensorDisabledDelay"
+				){
+				log.debug("Sign Commands Config: " + temp + " = " + value);
 			}
-			comment = doc.createComment("The color of the prefix. Valid Colors are: \n\t" + colors);
-			setting.appendChild(doc.createTextNode("yellow"));
-			rootElement.appendChild(setting);
-			rootElement.insertBefore(comment,setting);
-			
-			setting = doc.createElement("AnnouncementColor");
-			comment = doc.createComment("The color of the message of the announcement");
-			setting.appendChild(doc.createTextNode("white"));
-			rootElement.appendChild(setting);
-			rootElement.insertBefore(comment,setting);
-			
-			
-			setting = doc.createElement("SensorDisabledDelay");
-			comment = doc.createComment("The delay (in ticks. 20 ticks = 1 second) that sensors stay active after a minecart passes");
-			setting.appendChild(doc.createTextNode("8"));
-			rootElement.appendChild(setting);
-			rootElement.insertBefore(comment,setting);
-			
-			
-			
+		}
+	}
+
+	@Override
+	public boolean write(File configuration, Document document) {
+		try {
+			if (document == null) {
+				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+				//root elements
+				document = docBuilder.newDocument();
+				document.setXmlStandalone(true);
+				Element rootElement = document.createElement("MinecartManiaConfiguration");
+				document.appendChild(rootElement);
+
+				Element setting = document.createElement("version");
+				setting.appendChild(document.createTextNode(String.valueOf(version)));
+				rootElement.appendChild(setting);
+
+				setting = document.createElement("AnnouncementSignPrefix");
+				Comment comment = document.createComment("The prefix displayed before all announcement messages are displayed to the player.");
+				setting.appendChild(document.createTextNode("[Announcement]"));
+				rootElement.appendChild(setting);
+				rootElement.insertBefore(comment,setting);
+
+				setting = document.createElement("AnnouncementSignPrefixColor");
+				String colors = "";
+				for (ChatColor c : ChatColor.values()) {
+					colors += c.name().toLowerCase() + ", ";
+				}
+				comment = document.createComment("The color of the prefix. Valid Colors are: \n\t" + colors);
+				setting.appendChild(document.createTextNode("yellow"));
+				rootElement.appendChild(setting);
+				rootElement.insertBefore(comment,setting);
+
+				setting = document.createElement("AnnouncementColor");
+				comment = document.createComment("The color of the message of the announcement");
+				setting.appendChild(document.createTextNode("white"));
+				rootElement.appendChild(setting);
+				rootElement.insertBefore(comment,setting);
+
+				setting = document.createElement("SensorDisabledDelay");
+				comment = document.createComment("The delay (in ticks. 20 ticks = 1 second) that sensors stay active after a minecart passes");
+				setting.appendChild(document.createTextNode("8"));
+				rootElement.appendChild(setting);
+				rootElement.insertBefore(comment,setting);
+			}
+
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-			DOMSource source = new DOMSource(doc);
+			DOMSource source = new DOMSource(document);
 			StreamResult result = new StreamResult(configuration);
 			transformer.transform(source, result);
 		}
