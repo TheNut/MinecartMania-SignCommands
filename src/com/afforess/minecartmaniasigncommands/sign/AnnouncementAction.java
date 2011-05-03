@@ -70,11 +70,7 @@ public class AnnouncementAction implements SignAction{
 		if (sign.getBlockZ() != location.getBlockZ()) {
 			return false;
 		}
-		if (sign.getBlockY() - location.getBlockY() > 0 && sign.getBlockY() - location.getBlockY() < 4) {
-			return true;
-		}
-		
-		return false;
+		return true;
 	}
 
 	@Override
