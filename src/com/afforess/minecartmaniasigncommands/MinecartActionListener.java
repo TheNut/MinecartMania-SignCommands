@@ -2,7 +2,7 @@ package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
 
-import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.config.ControlBlock;
 import com.afforess.minecartmaniacore.config.ControlBlockList;
 import com.afforess.minecartmaniacore.config.LocaleParser;

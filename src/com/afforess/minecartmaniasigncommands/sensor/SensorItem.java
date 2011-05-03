@@ -2,11 +2,11 @@ package com.afforess.minecartmaniasigncommands.sensor;
 
 import org.bukkit.block.Sign;
 
-import com.afforess.minecartmaniacore.AbstractItem;
-import com.afforess.minecartmaniacore.MinecartManiaMinecart;
-import com.afforess.minecartmaniacore.MinecartManiaPlayer;
-import com.afforess.minecartmaniacore.MinecartManiaStorageCart;
-import com.afforess.minecartmaniacore.MinecartManiaWorld;
+import com.afforess.minecartmaniacore.world.AbstractItem;
+import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.entity.MinecartManiaPlayer;
+import com.afforess.minecartmaniacore.minecart.MinecartManiaStorageCart;
+import com.afforess.minecartmaniacore.world.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.utils.StringUtils;
 
 public class SensorItem extends GenericSensor{

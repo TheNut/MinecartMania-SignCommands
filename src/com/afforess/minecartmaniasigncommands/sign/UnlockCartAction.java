@@ -1,6 +1,6 @@
 package com.afforess.minecartmaniasigncommands.sign;
 
-import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.config.LocaleParser;
 import com.afforess.minecartmaniacore.signs.Sign;
 

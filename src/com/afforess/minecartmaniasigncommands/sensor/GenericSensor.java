@@ -15,9 +15,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 
-import com.afforess.minecartmaniacore.Item;
+import com.afforess.minecartmaniacore.world.Item;
 import com.afforess.minecartmaniacore.MinecartManiaCore;
-import com.afforess.minecartmaniacore.MinecartManiaWorld;
+import com.afforess.minecartmaniacore.world.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.utils.DirectionUtils;
 
 @Entity()

@@ -1,7 +1,7 @@
 package com.afforess.minecartmaniasigncommands.sensor;
 
 import org.bukkit.block.Sign;
-import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
 
 public class SensorEntity extends GenericSensor{
 	

@@ -2,7 +2,7 @@ package com.afforess.minecartmaniasigncommands.sign;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import com.afforess.minecartmaniacore.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.signs.Sign;
 import com.afforess.minecartmaniacore.signs.SignAction;
 import com.afforess.minecartmaniacore.signs.SignManager;
