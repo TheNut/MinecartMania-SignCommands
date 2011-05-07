@@ -86,7 +86,7 @@ public abstract class GenericSensor implements Sensor, Serializable {
 				}
 			}
 		};
-		MinecartManiaCore.server.getScheduler().scheduleSyncDelayedTask(MinecartManiaCore.instance, task, MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("SensorDisabledDelay")));
+		MinecartManiaCore.server.getScheduler().scheduleSyncDelayedTask(MinecartManiaCore.instance, task, (Integer)MinecartManiaWorld.getConfigurationValue("SensorDisabledDelay"));
 	}
 	
 	private void disable() {

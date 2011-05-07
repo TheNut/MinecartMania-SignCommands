@@ -10,7 +10,7 @@ import com.afforess.minecartmaniacore.signs.SignManager;
 
 public class AnnouncementAction implements SignAction{
 	
-	protected String announcement;
+	protected String[] announcement;
 	protected Location sign;
 	public AnnouncementAction(Sign sign) {
 		this.sign = sign.getLocation();
@@ -18,20 +18,24 @@ public class AnnouncementAction implements SignAction{
 		final String title = MinecartManiaWorld.getConfigurationValue("AnnouncementSignPrefixColor").toString()
 		+ MinecartManiaWorld.getConfigurationValue("AnnouncementSignPrefix").toString() + " "
 		+ MinecartManiaWorld.getConfigurationValue("AnnouncementColor");
-		announcement = title + sign.getLine(1);
+		announcement = new String[3];
+		int line = 0;
+		announcement[line] = title + sign.getLine(1);
 		//! signifies a new line, otherwise continue message on same line
 		if (sign.getLine(2).startsWith("!")) {
-			announcement += "\n" + title + sign.getLine(2).substring(1);
+			line++;
+			announcement[line] = '\n' + title + sign.getLine(2).substring(1);
 		}
 		else {
-			announcement += sign.getLine(2);
+			announcement[line] += sign.getLine(2);
 		}
 		
 		if (sign.getLine(3).startsWith("!")) {
-			announcement += "\n" + title + sign.getLine(3).substring(1);
+			line++;
+			announcement[line] = '\n' + title + sign.getLine(3).substring(1);
 		}
 		else {
-			announcement += sign.getLine(3);
+			announcement[line] += sign.getLine(3);
 		}
 	}
 	
@@ -43,7 +47,11 @@ public class AnnouncementAction implements SignAction{
 	public boolean execute(MinecartManiaMinecart minecart) {
 		if (minecart.hasPlayerPassenger()) {
 			if (isParallel(minecart.getLocation()) || isUnder(minecart.getLocation())) {
-				minecart.getPlayerPassenger().sendMessage(announcement);
+				for (int i = 0; i < 3; i++) {
+					if (announcement[i] != null && !announcement[i].trim().isEmpty()) {
+						minecart.getPlayerPassenger().sendMessage(announcement[i]);
+					}
+				}
 				return true;
 			}
 		}
@@ -51,7 +59,7 @@ public class AnnouncementAction implements SignAction{
 	}
 	
 	protected boolean isParallel(Location location) {
-		if (sign.getBlockY() != location.getBlockY()) {
+		if (Math.abs(sign.getBlockY() - location.getBlockY()) > 2) {
 			return false;
 		}
 		if (sign.getBlockX() != location.getBlockX() && sign.getBlockZ() == location.getBlockZ()) {

@@ -1,8 +1,8 @@
 package com.afforess.minecartmaniasigncommands.sign;
 
+import com.afforess.minecartmaniacore.config.MinecartManiaConfiguration;
 import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
 import com.afforess.minecartmaniacore.minecart.MinecartManiaStorageCart;
-import com.afforess.minecartmaniacore.world.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.signs.Sign;
 import com.afforess.minecartmaniacore.signs.SignAction;
 import com.afforess.minecartmaniacore.utils.MathUtils;
@@ -20,7 +20,7 @@ public class AlterRangeAction implements SignAction{
 				if (split.length != 2) continue;
 				try {
 					this.range = Integer.parseInt(StringUtils.getNumber(split[1]));
-					this.range = MathUtils.range(this.range, MinecartManiaWorld.getIntValue(MinecartManiaWorld.getConfigurationValue("MaximumRange")), 0);
+					this.range = MathUtils.range(this.range, MinecartManiaConfiguration.getMinecartMaximumRange(), 0);
 				}
 				catch (Exception e) {
 					this.range = -1;
