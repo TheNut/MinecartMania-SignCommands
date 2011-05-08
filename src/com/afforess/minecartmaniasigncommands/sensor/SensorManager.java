@@ -1,17 +1,11 @@
 package com.afforess.minecartmaniasigncommands.sensor;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
-import com.afforess.minecartmaniacore.MinecartManiaCore;
+import com.afforess.minecartmaniasigncommands.MinecartManiaSignCommands;
 
 public class SensorManager {
 	//Maintain a list of active sensors. Saved on server shutdown.
@@ -23,17 +17,51 @@ public class SensorManager {
 		if (s != null) {
 			if (!(loc.getBlock().getState() instanceof Sign)) {
 				sensors.remove(loc);
+				deleteSensor(s);
 				s = null;
 			}
 			else if (!verifySensor((Sign)loc.getBlock().getState(), s)) {
 				sensors.remove(loc);
+				deleteSensor(s);
 				s = null;
+			}
+		}
+		else {
+			SensorDataTable data = MinecartManiaSignCommands.instance.getDatabase().find(SensorDataTable.class).where()
+			.ieq("x", Integer.toString(loc.getBlockX())).ieq("y", Integer.toString(loc.getBlockY()))
+			.ieq("z", Integer.toString(loc.getBlockZ())).ieq("world", loc.getWorld().getName()).findUnique();
+			if (data != null) {
+				s = data.toSensor();
+				if (s != null) {
+					if (!(loc.getBlock().getState() instanceof Sign)) {
+						sensors.remove(loc);
+						deleteSensor(s);
+						s = null;
+					}
+					else if (!verifySensor((Sign)loc.getBlock().getState(), s)) {
+						sensors.remove(loc);
+						deleteSensor(s);
+						s = null;
+					}
+					sensors.put(loc, s);
+					return s;
+				}
 			}
 		}
 		return s;
 	}
+	
+	public static void saveSensor(Sensor sensor) {
+		MinecartManiaSignCommands.instance.getDatabase().save(sensor.getDataTable());
+		
+	}
+	
+	public static void deleteSensor(final Sensor sensor) {
+		MinecartManiaSignCommands.instance.getDatabase().delete(sensor.getDataTable());
+	}
 
 	public static Sensor addSensor(Location loc, Sensor s) {
+		saveSensor(s);
 		return sensors.put(loc, s);
 	}
 
@@ -42,11 +70,7 @@ public class SensorManager {
 	}
 
 	 public static boolean delSensor(Location loc) {
-		 if (sensors.containsKey(loc)) {
-			 sensors.remove(loc);
-			 return true;
-		 }
-		 return false;
+		return sensors.remove(loc) != null;
 	}
 	 
 	 public static boolean verifySensor(Sign sign, Sensor sensor) {
@@ -57,49 +81,5 @@ public class SensorManager {
 			 return false;
 		 }
 		 return sign.getLine(1).equals(sensor.getName());
-	 }
-	 
-	 public static void saveSensors() {
-		 File sensorData = new File(MinecartManiaCore.dataDirectory + File.separator + "Sensors.data");
-		 try {
-			PrintWriter pw = new PrintWriter(sensorData);
-			Iterator<Entry<Location, Sensor>> i = sensors.entrySet().iterator();
-			while(i.hasNext()) {
-				Entry<Location, Sensor> e = i.next();
-				if (e.getValue() instanceof GenericSensor) {
-					pw.append(((GenericSensor)e.getValue()).toString());
-					pw.append("\n");
-				}
-			}
-			pw.close();
-		 }
-		 catch (IOException ex) {
-			 MinecartManiaCore.log.severe("[Minecart Mania] Failed to save sensor data");
-		 }
-	 }
-	 
-	 public static void loadSensors() {
-		 File sensorData = new File(MinecartManiaCore.dataDirectory + File.separator + "Sensors.data");
-		 if (sensorData.exists()) {
-			 try {
-				Scanner input = new Scanner(sensorData);
-
-				while(input.hasNext()){
-					try {
-						String str = input.nextLine();
-						Sensor s = GenericSensor.fromString(str);
-						if (s != null) {
-							addSensor(s.getLocation(), s);
-						}
-					}
-					catch (Exception e) {}
-				}
-				input.close();
-			 }
-			 catch (IOException ex) {
-				 MinecartManiaCore.log.severe("[Minecart Mania] Failed to load sensor data!");
-			 }
-			 
-		 }
 	 }
 }

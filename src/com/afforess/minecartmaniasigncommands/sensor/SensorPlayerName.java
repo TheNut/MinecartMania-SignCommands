@@ -3,7 +3,6 @@ package com.afforess.minecartmaniasigncommands.sensor;
 import org.bukkit.block.Sign;
 
 import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
-import com.afforess.minecartmaniacore.utils.StringUtils;
 
 public class SensorPlayerName extends GenericSensor{
 	private String player;
@@ -24,9 +23,5 @@ public class SensorPlayerName extends GenericSensor{
 			}
 		}
 		setState(state);
-	}
-	
-	public String toString() {
-		return "[" + StringUtils.removeBrackets(format()) + ":" + player + "]";
 	}
 }

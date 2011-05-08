@@ -1,16 +1,11 @@
 package com.afforess.minecartmaniasigncommands.sensor;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -20,15 +15,15 @@ import com.afforess.minecartmaniacore.MinecartManiaCore;
 import com.afforess.minecartmaniacore.world.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.utils.DirectionUtils;
 
-@Entity()
-@Table(name = "sensors")
-public abstract class GenericSensor implements Sensor, Serializable {
+
+public abstract class GenericSensor implements Sensor {
 	private static final long serialVersionUID = 73660042031252094L;
 	protected boolean state = false;
 	protected Location sign;
 	protected SensorType type;
 	protected String name;
 	protected boolean master = true;
+	private SensorDataTable data = null;
 	
 	public GenericSensor(SensorType type, Sign sign, String name) {
 		this.type = type;
@@ -48,10 +43,14 @@ public abstract class GenericSensor implements Sensor, Serializable {
 		}
 	}
 	
+	public boolean isState() {
+		return state;
+	}
+	
 	protected void setState(boolean state) {
 		setState(state, isMaster());
 	}
-	
+
 	private void setState(boolean state, boolean force) {
 		if (!force && !isMaster()) {
 			getMaster().setState(state, true);
@@ -80,7 +79,7 @@ public abstract class GenericSensor implements Sensor, Serializable {
 	private void delayedDisable() {
 		Runnable task = new Runnable() {
 			public void run() {
-				if (sign.getBlock().getState() instanceof Sign) {
+				if (getLocation().getBlock().getState() instanceof Sign) {
 					disable();
 					update();
 				}
@@ -121,7 +120,7 @@ public abstract class GenericSensor implements Sensor, Serializable {
 		return null;
 	}
 	
-	private boolean isMaster() {
+	public boolean isMaster() {
 		return master || getName().isEmpty();
 	}
 	
@@ -173,16 +172,16 @@ public abstract class GenericSensor implements Sensor, Serializable {
 
 	@Override
 	public Sign getSign() {
-		return (Sign)sign.getBlock().getState();
+		return (Sign)getLocation().getBlock().getState();
 	}
 	
 	private boolean hasSign() {
-		return sign.getBlock().getState() instanceof Sign;
+		return getLocation().getBlock().getState() instanceof Sign;
 	}
 	
 	@Override
 	public Location getLocation() {
-		return sign;
+		return this.sign;
 	}
 
 	@Override
@@ -198,7 +197,7 @@ public abstract class GenericSensor implements Sensor, Serializable {
 				return true;
 			}
 		}
-		return location.equals(sign);
+		return location.equals(getLocation());
 	}
 
 	@Override
@@ -206,30 +205,11 @@ public abstract class GenericSensor implements Sensor, Serializable {
 		
 	}
 	
-	protected String format() {
-		return "[" + getType() + ":" + state + ":" + sign.getWorld().getName() + ":" + sign.getBlockX() + ":" + sign.getBlockY() + ":" + sign.getBlockZ() + ":" + name + ":" + master + "]";
-	}
-	
-	public String toString() {
-		return format();
-	}
-	
-	public static Sensor fromString(String str) {
-		try {
-			String[] split = str.split(":");
-			boolean state = Boolean.valueOf(split[1]);
-			World w = MinecartManiaCore.server.getWorld(split[2]);
-			Location sign = new Location(w, Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]));
-			String name = split[6];
-			boolean master = Boolean.valueOf(split[7]);
-			GenericSensor sensor = (GenericSensor) SensorConstructor.constructSensor((Sign)sign.getBlock().getState(), null);
-			sensor.master = master;
-			sensor.state = state;
-			sensor.name = name;
-			sensor.update();
-			return sensor;
+	@Override
+	public SensorDataTable getDataTable() {
+		if (data == null) {
+			data = new SensorDataTable(sign, name, type, state, master);
 		}
-		catch (Exception e) {}
-		return null;
+		return data;
 	}
 }

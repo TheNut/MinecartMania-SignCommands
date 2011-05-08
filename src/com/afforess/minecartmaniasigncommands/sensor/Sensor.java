@@ -22,4 +22,6 @@ public interface Sensor{
 	public boolean equals(Location location);
 	
 	public void kill();
+	
+	public SensorDataTable getDataTable();
 }
