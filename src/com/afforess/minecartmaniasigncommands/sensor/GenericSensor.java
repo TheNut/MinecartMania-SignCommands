@@ -23,7 +23,7 @@ public abstract class GenericSensor implements Sensor {
 	protected SensorType type;
 	protected String name;
 	protected boolean master = true;
-	private SensorDataTable data = null;
+	protected SensorDataTable data = null;
 	
 	public GenericSensor(SensorType type, Sign sign, String name) {
 		this.type = type;

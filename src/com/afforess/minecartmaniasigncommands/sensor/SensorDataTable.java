@@ -190,6 +190,7 @@ public class SensorDataTable {
 		}
 		((GenericSensor)sensor).master = master;
 		((GenericSensor)sensor).state = state;
+		((GenericSensor)sensor).data = this;
 		return sensor;
 	}
 

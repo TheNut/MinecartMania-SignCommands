@@ -49,7 +49,6 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 		
 		//sensor setup
 		File ebeans = new File(new File(this.getDataFolder().getParent()).getParent(), "ebean.properties");
-		System.out.println("Ebeans: " + ebeans.getAbsolutePath());
 		if (!ebeans.exists()) {
 			try {
 				ebeans.createNewFile();
@@ -69,13 +68,17 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 			oldSensorData.delete();
 		}
 		setupDatabase();
+		int maxId = 0;
 		List<SensorDataTable> data = getDatabase().find(SensorDataTable.class).findList();
 		for (SensorDataTable temp : data) {
 			if (temp.getLocation().getBlock().getState() instanceof Sign) {
 				SensorManager.getSensor(temp.getLocation()); //force load of sensor
+				if (temp.getId() > maxId) {
+					maxId = temp.getId();
+				}
 			}
 		}
-		SensorDataTable.lastId = (Integer)getDatabase().nextId(SensorDataTable.class);
+		SensorDataTable.lastId = maxId;
 		log.info( description.getName() + " version " + description.getVersion() + " is enabled!" );
 	}
 	
