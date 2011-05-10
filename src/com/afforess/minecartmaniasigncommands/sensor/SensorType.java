@@ -12,7 +12,7 @@ public enum SensorType {
     DETECT_PLAYER("0005", "Detect Player"),
     DETECT_STORAGE("0006", "Detect Storage"),
     DETECT_POWERED("0007", "Detect Powered"),
-    DETECT_ITEM("0008", "Detect Item"),
+    DETECT_ITEM_AND("0008", "Detect Item (And)"),
     DETECT_PLYR_NAME("0009", "Detect Name"),
     DETECT_ZOMBIE("0010", "Detect Zombie"),
     DETECT_SKELETON("0011", "Detect Skeleton"),
@@ -20,7 +20,8 @@ public enum SensorType {
     DETECT_PIG("0013", "Detect Pig"),
     DETECT_SHEEP("0014", "Detect Sheep"),
     DETECT_COW("0015", "Detect Cow"),
-    DETECT_CHICKEN("0016", "Detect Chicken")
+    DETECT_CHICKEN("0016", "Detect Chicken"),
+    DETECT_ITEM_OR("0017", "Detect Item (Or)")
     ;
     private String type;
     private String desc;

@@ -71,10 +71,12 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 		int maxId = 0;
 		List<SensorDataTable> data = getDatabase().find(SensorDataTable.class).findList();
 		for (SensorDataTable temp : data) {
-			if (temp.getLocation().getBlock().getState() instanceof Sign) {
-				SensorManager.getSensor(temp.getLocation()); //force load of sensor
-				if (temp.getId() > maxId) {
-					maxId = temp.getId();
+			if (temp.hasValidLocation()) {
+				if (temp.getLocation().getBlock().getState() instanceof Sign) {
+					SensorManager.getSensor(temp.getLocation()); //force load of sensor
+					if (temp.getId() > maxId) {
+						maxId = temp.getId();
+					}
 				}
 			}
 		}

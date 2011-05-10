@@ -122,6 +122,10 @@ public class SensorDataTable {
 	public String getWorld() {
 		return world;
 	}
+
+	public boolean hasValidLocation() {
+		return Bukkit.getServer().getWorld(world) != null;
+	}
 	
 	public Location getLocation() {
 		return new Location(Bukkit.getServer().getWorld(world), x, y, z);
@@ -178,7 +182,8 @@ public class SensorDataTable {
 			case DETECT_PLAYER: sensor = new SensorPlayer(type, sign, name); break;
 			case DETECT_STORAGE: sensor = new SensorStorage(type, sign, name); break;
 			case DETECT_POWERED: sensor = new SensorPowered(type, sign, name); break;
-			case DETECT_ITEM: sensor = new SensorItem(type, sign, name, Arrays.asList(ItemUtils.getItemStringToMaterial(sign.getLine(2)))); break;
+			case DETECT_ITEM_AND: sensor = new SensorItem(type, sign, name, Arrays.asList(ItemUtils.getItemStringToMaterial(sign.getLine(2)))); break;
+			case DETECT_ITEM_OR: sensor = new SensorItemOr(type, sign, name, Arrays.asList(ItemUtils.getItemStringToMaterial(sign.getLine(2)))); break;
 			case DETECT_PLYR_NAME: sensor = new SensorPlayerName(type, sign, name, sign.getLine(2).trim()); break;
 			case DETECT_ZOMBIE: sensor = new SensorZombie(type, sign, name); break;
 			case DETECT_SKELETON: sensor = new SensorSkeleton(type, sign, name); break;
@@ -187,7 +192,7 @@ public class SensorDataTable {
 			case DETECT_SHEEP: sensor = new SensorSheep(type, sign, name); break;
 			case DETECT_COW: sensor = new SensorCow(type, sign, name); break;
 			case DETECT_CHICKEN: sensor = new SensorChicken(type, sign, name); break;
-		}
+	}
 		((GenericSensor)sensor).master = master;
 		((GenericSensor)sensor).state = state;
 		((GenericSensor)sensor).data = this;
