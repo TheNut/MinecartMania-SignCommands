@@ -2,9 +2,9 @@ package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
 
+import org.bukkit.ChatColor;
+
 import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
-import com.afforess.minecartmaniacore.config.ControlBlock;
-import com.afforess.minecartmaniacore.config.ControlBlockList;
 import com.afforess.minecartmaniacore.config.LocaleParser;
 import com.afforess.minecartmaniacore.event.MinecartActionEvent;
 import com.afforess.minecartmaniacore.event.MinecartCaughtEvent;
@@ -15,11 +15,14 @@ import com.afforess.minecartmaniacore.event.MinecartManiaMinecartCreatedEvent;
 import com.afforess.minecartmaniacore.event.MinecartManiaMinecartDestroyedEvent;
 import com.afforess.minecartmaniacore.event.MinecartManiaSignFoundEvent;
 import com.afforess.minecartmaniacore.event.MinecartMotionStopEvent;
+import com.afforess.minecartmaniacore.event.MinecartPassengerEjectEvent;
 import com.afforess.minecartmaniacore.event.MinecartTimeEvent;
+import com.afforess.minecartmaniacore.signs.FailureReason;
 import com.afforess.minecartmaniacore.signs.SignAction;
 import com.afforess.minecartmaniacore.signs.SignManager;
 import com.afforess.minecartmaniacore.utils.SignUtils;
 import com.afforess.minecartmaniasigncommands.sign.EjectionAction;
+import com.afforess.minecartmaniasigncommands.sign.EjectionConditionAction;
 import com.afforess.minecartmaniasigncommands.sign.HoldSignData;
 import com.afforess.minecartmaniasigncommands.sign.SignType;
 
@@ -33,17 +36,36 @@ public class MinecartActionListener extends MinecartManiaListener{
 		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
 			sign.executeActions(minecart);
 		}
-		//Special Case
-		ControlBlock cb = ControlBlockList.getControlBlock(minecart.getItemBeneath());
-		if (cb != null && cb.isEjectorBlock()) {
-			list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 8);
-			SignUtils.sortByDistance(minecart.getLocation(), list);
-			for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
-				sign.executeAction(minecart, EjectionAction.class);
+		SignCommands.updateSensors(minecart);
+	}
+	
+	public void onMinecartPassengerEjectEvent(MinecartPassengerEjectEvent event) {
+		MinecartManiaMinecart minecart = event.getMinecart();
+		ArrayList<com.afforess.minecartmaniacore.signs.Sign> list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 2);
+		boolean success = false;
+		boolean found = false;
+		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
+			if (sign.hasSignAction(EjectionConditionAction.class)) {
+				found = true;
+				if (sign.executeAction(minecart, EjectionConditionAction.class)) {
+					success = true;
+					break;
+				}
 			}
 		}
-		
-		SignCommands.updateSensors(minecart);
+		if (found && !success) {
+			event.setCancelled(true);
+		}
+		if (minecart.getDataValue("Eject At Sign") == null) {
+			list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 8, true);
+			SignUtils.sortByDistance(minecart.getLocation(), list);
+			for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
+				if (sign.executeAction(minecart, EjectionAction.class)) {
+					event.setCancelled(true);
+					break;
+				}
+			}
+		}
 	}
 	
 	public void onMinecartLaunchedEvent(MinecartLaunchedEvent event) {
@@ -139,6 +161,11 @@ public class MinecartActionListener extends MinecartManiaListener{
 			SignAction action = type.getSignAction(sign);
 			if (action.valid(sign)) {
 				sign.addSignAction(action);
+			}
+			else if (action instanceof FailureReason && event.getPlayer() != null) {
+				if (((FailureReason)action).getReason() != null) {
+					event.getPlayer().sendMessage(ChatColor.RED + ((FailureReason)action).getReason());
+				}
 			}
 		}
 	}

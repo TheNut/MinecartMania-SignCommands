@@ -37,7 +37,7 @@ public class EjectionAction implements SignAction{
 
 	@Override
 	public boolean async() {
-		return true;
+		return false;
 	}
 
 	@Override

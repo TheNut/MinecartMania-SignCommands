@@ -36,6 +36,8 @@ public enum SignType {
 	HoldingForSign(HoldingForAction.class),
 	ElevatorSign(ElevatorAction.class),
 	PassPlayerSign(PassPlayerAction.class),
+	EjectAtSign(EjectAtAction.class),
+	EjectionConditionAction(EjectionConditionAction.class),
 	
 	
 	;
