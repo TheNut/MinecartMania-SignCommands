@@ -3,6 +3,7 @@ package com.afforess.minecartmaniasigncommands.sign;
 import org.bukkit.Location;
 
 import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
+import com.afforess.minecartmaniacore.utils.DirectionUtils.CompassDirection;
 import com.afforess.minecartmaniacore.world.MinecartManiaWorld;
 import com.afforess.minecartmaniacore.signs.Sign;
 import com.afforess.minecartmaniacore.signs.SignAction;
@@ -46,7 +47,7 @@ public class AnnouncementAction implements SignAction{
 	@Override
 	public boolean execute(MinecartManiaMinecart minecart) {
 		if (minecart.hasPlayerPassenger()) {
-			if (isParallel(minecart.getLocation()) || isUnder(minecart.getLocation())) {
+			if (isParallel(minecart.getLocation(), minecart.getDirection()) || isUnder(minecart.getLocation())) {
 				for (int i = 0; i < 3; i++) {
 					if (announcement[i] != null && !announcement[i].trim().isEmpty()) {
 						minecart.getPlayerPassenger().sendMessage(announcement[i]);
@@ -58,15 +59,19 @@ public class AnnouncementAction implements SignAction{
 		return false;
 	}
 	
-	protected boolean isParallel(Location location) {
+	protected boolean isParallel(Location location, CompassDirection exempt) {
 		if (Math.abs(sign.getBlockY() - location.getBlockY()) > 2) {
 			return false;
 		}
-		if (sign.getBlockX() != location.getBlockX() && sign.getBlockZ() == location.getBlockZ()) {
-			return (sign.getBlockX() - 1) == location.getBlockX() || (sign.getBlockX() + 1) == location.getBlockX();
+		if (exempt != CompassDirection.NORTH && exempt != CompassDirection.SOUTH) {
+			if (sign.getBlockX() != location.getBlockX() && sign.getBlockZ() == location.getBlockZ()) {
+				return (sign.getBlockX() - 1) == location.getBlockX() || (sign.getBlockX() + 1) == location.getBlockX();
+			}
 		}
-		if (sign.getBlockX() == location.getBlockX() && sign.getBlockZ() != location.getBlockZ()) {
-			return (sign.getBlockZ() - 1) == location.getBlockZ() || (sign.getBlockZ() + 1) == location.getBlockZ();
+		if (exempt != CompassDirection.EAST && exempt != CompassDirection.WEST) {
+			if (sign.getBlockX() == location.getBlockX() && sign.getBlockZ() != location.getBlockZ()) {
+				return (sign.getBlockZ() - 1) == location.getBlockZ() || (sign.getBlockZ() + 1) == location.getBlockZ();
+			}
 		}
 		return false;
 	}

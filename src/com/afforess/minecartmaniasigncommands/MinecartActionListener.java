@@ -58,7 +58,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 		}
 		if (minecart.getDataValue("Eject At Sign") == null) {
 			list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 8, true);
-			SignUtils.sortByDistance(minecart.getLocation(), list);
+			SignUtils.sortByDistance(minecart.getLocation().getBlock(), list);
 			for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
 				if (sign.executeAction(minecart, EjectionAction.class)) {
 					event.setCancelled(true);
