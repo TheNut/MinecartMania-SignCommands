@@ -67,6 +67,7 @@ public abstract class SensorConstructor {
 				case DETECT_SHEEP: sensor = new SensorSheep(sensorType, sign, name); break;
 				case DETECT_COW: sensor = new SensorCow(sensorType, sign, name); break;
 				case DETECT_CHICKEN: sensor = new SensorChicken(sensorType, sign, name); break;
+				case DETECT_ZOMBIEPIGMAN: sensor = new SensorZombiePigman(sensorType, sign, name); break;
 			}
 			if (player != null) {
 				player.sendMessage(LocaleParser.getTextKey("SignCommandsSensorSuccess"));

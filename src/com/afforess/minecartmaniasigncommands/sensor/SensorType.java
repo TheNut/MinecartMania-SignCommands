@@ -21,7 +21,8 @@ public enum SensorType {
     DETECT_SHEEP("0014", "Detect Sheep"),
     DETECT_COW("0015", "Detect Cow"),
     DETECT_CHICKEN("0016", "Detect Chicken"),
-    DETECT_ITEM_OR("0017", "Detect Item (Or)")
+    DETECT_ITEM_OR("0017", "Detect Item (Or)"),
+    DETECT_ZOMBIEPIGMAN("0018", "Detect ZombiePigman")
     ;
     private String type;
     private String desc;

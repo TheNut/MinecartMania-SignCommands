@@ -192,6 +192,7 @@ public class SensorDataTable {
 			case DETECT_SHEEP: sensor = new SensorSheep(type, sign, name); break;
 			case DETECT_COW: sensor = new SensorCow(type, sign, name); break;
 			case DETECT_CHICKEN: sensor = new SensorChicken(type, sign, name); break;
+			case DETECT_ZOMBIEPIGMAN: sensor = new SensorZombiePigman(type, sign, name); break;
 	}
 		((GenericSensor)sensor).master = master;
 		((GenericSensor)sensor).state = state;
