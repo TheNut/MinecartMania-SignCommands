@@ -1,6 +1,9 @@
 package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.PersistenceException;
 
 import org.bukkit.ChatColor;
 
@@ -14,6 +17,7 @@ import com.afforess.minecartmaniacore.event.MinecartManiaListener;
 import com.afforess.minecartmaniacore.event.MinecartManiaMinecartCreatedEvent;
 import com.afforess.minecartmaniacore.event.MinecartManiaMinecartDestroyedEvent;
 import com.afforess.minecartmaniacore.event.MinecartManiaSignFoundEvent;
+import com.afforess.minecartmaniacore.event.MinecartMotionStartEvent;
 import com.afforess.minecartmaniacore.event.MinecartMotionStopEvent;
 import com.afforess.minecartmaniacore.event.MinecartPassengerEjectEvent;
 import com.afforess.minecartmaniacore.event.MinecartTimeEvent;
@@ -30,7 +34,19 @@ public class MinecartActionListener extends MinecartManiaListener{
 
 	public void onMinecartActionEvent(MinecartActionEvent event) {
 		MinecartManiaMinecart minecart = event.getMinecart();
-		minecart.setDataValue("HoldForDelay", null);
+		
+		//Only triggered on starting servers, not normally executed
+		HoldSignData data = null;
+		try {
+			data = MinecartManiaSignCommands.instance.getDatabase().find(HoldSignData.class).where().idEq(minecart.minecart.getEntityId()).findUnique();
+		}
+		catch (PersistenceException e) {
+			data = null;
+		}
+		if (data != null) {
+			minecart.teleport(data.getMinecartLocation());
+			return;
+		}
 		
 		ArrayList<com.afforess.minecartmaniacore.signs.Sign> list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 2);
 		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
@@ -94,34 +110,44 @@ public class MinecartActionListener extends MinecartManiaListener{
 	
 	public void onMinecartTimeEvent(MinecartTimeEvent event) {
 		MinecartManiaMinecart minecart = event.getMinecart();
-		Object o = minecart.getDataValue("hold sign data");
-		if (o != null) {
-			HoldSignData data = (HoldSignData)o;
-			
-			data.time--;
-			com.afforess.minecartmaniacore.signs.Sign sign = SignManager.getSignAt(data.sign);
+		HoldSignData data = (HoldSignData)minecart.getDataValue("hold sign data");
+		if (data == null) {
+			try {
+				data = MinecartManiaSignCommands.instance.getDatabase().find(HoldSignData.class).where().idEq(minecart.minecart.getEntityId()).findUnique();
+			}
+			catch (Exception e) {
+				List<HoldSignData> list = MinecartManiaSignCommands.instance.getDatabase().find(HoldSignData.class).where().idEq(minecart.minecart.getEntityId()).findList();
+				MinecartManiaSignCommands.instance.getDatabase().delete(list);
+			}
+		}
+		if (data != null) {
+			data.setTime(data.getTime() - 1);
+			com.afforess.minecartmaniacore.signs.Sign sign = SignManager.getSignAt(data.getSignLocation());
 			if (sign == null) {
-				minecart.minecart.setVelocity(data.motion);
+				minecart.minecart.setVelocity(data.getMotion());
 				minecart.setDataValue("hold sign data", null);
+				minecart.setDataValue("HoldForDelay", null);
 				return;
 			}
 			//update sign counter
-			if (data.line < sign.getNumLines() && data.line > -1) {
-				if (data.time > 0) {
-					sign.setLine(data.line, "[Holding For " + data.time + "]");
+			if (data.getLine() < sign.getNumLines() && data.getLine() > -1) {
+				if (data.getTime() > 0) {
+					sign.setLine(data.getLine(), "[Holding For " + data.getTime() + "]");
 				}
 				else {
-					sign.setLine(data.line, "");
+					sign.setLine(data.getLine(), "");
 				}
 			}
 			
-			
-			if (data.time == 0) {
-				minecart.minecart.setVelocity(data.motion);
+			if (data.getTime() == 0) {
+				minecart.minecart.setVelocity(data.getMotion());
 				minecart.setDataValue("hold sign data", null);
+				minecart.setDataValue("HoldForDelay", null);
+				MinecartManiaSignCommands.instance.getDatabase().delete(data);
 			}
 			else {
 				minecart.setDataValue("hold sign data", data);
+				MinecartManiaSignCommands.instance.getDatabase().update(data);
 			}
 		}
 	}
@@ -137,6 +163,15 @@ public class MinecartActionListener extends MinecartManiaListener{
 			if (minecart.hasPlayerPassenger()) {
 				minecart.getPlayerPassenger().sendMessage(LocaleParser.getTextKey("SignCommandsMinecartUnlocked"));
 			}
+		}
+	}
+	
+	public void onMinecartMotionStartEvent(MinecartMotionStartEvent event) {
+		MinecartManiaMinecart minecart = event.getMinecart();
+		if (minecart.getDataValue("HoldForDelay") != null) {
+			minecart.stopCart();
+			HoldSignData data = (HoldSignData)minecart.getDataValue("hold sign data");
+			minecart.teleport(data.getMinecartLocation());
 		}
 	}
 	

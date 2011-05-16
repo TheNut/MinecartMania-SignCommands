@@ -1,5 +1,7 @@
 package com.afforess.minecartmaniasigncommands.sign;
 
+import javax.persistence.PersistenceException;
+
 import org.bukkit.Location;
 
 import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
@@ -8,6 +10,7 @@ import com.afforess.minecartmaniacore.signs.Sign;
 import com.afforess.minecartmaniacore.signs.SignAction;
 import com.afforess.minecartmaniacore.signs.SignManager;
 import com.afforess.minecartmaniacore.utils.StringUtils;
+import com.afforess.minecartmaniasigncommands.MinecartManiaSignCommands;
 
 public class HoldingForAction implements SignAction{
 	
@@ -43,10 +46,20 @@ public class HoldingForAction implements SignAction{
 			return false;
 		}
 		if (ControlBlockList.isCatcherBlock(minecart.getItemBeneath())) {
-			HoldSignData data = new HoldSignData(time, line, sign, minecart.minecart.getVelocity());
+			HoldSignData data = null;
+			try {
+				data = MinecartManiaSignCommands.instance.getDatabase().find(HoldSignData.class).where().idEq(minecart.minecart.getEntityId()).findUnique();
+			}
+			catch (PersistenceException e) {
+				data = null;
+			}
+			if (data == null) {
+				data = new HoldSignData(minecart.minecart.getEntityId(), time, line, minecart.getLocation(), sign, minecart.minecart.getVelocity());
+			}
 			minecart.stopCart();
 			minecart.setDataValue("hold sign data", data);
 			minecart.setDataValue("HoldForDelay", true);
+			MinecartManiaSignCommands.instance.getDatabase().save(data);
 			if (line != -1) {
 				Sign sign = SignManager.getSignAt(this.sign);
 				sign.setLine(line, String.format("[Holding For %d]", time));
