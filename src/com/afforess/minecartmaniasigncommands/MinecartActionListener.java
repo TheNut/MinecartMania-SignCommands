@@ -1,10 +1,6 @@
 package com.afforess.minecartmaniasigncommands;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.PersistenceException;
-
 import org.bukkit.ChatColor;
 
 import com.afforess.minecartmaniacore.minecart.MinecartManiaMinecart;
@@ -34,20 +30,6 @@ public class MinecartActionListener extends MinecartManiaListener{
 
 	public void onMinecartActionEvent(MinecartActionEvent event) {
 		MinecartManiaMinecart minecart = event.getMinecart();
-		
-		//Only triggered on starting servers, not normally executed
-		HoldSignData data = null;
-		try {
-			data = MinecartManiaSignCommands.instance.getDatabase().find(HoldSignData.class).where().idEq(minecart.minecart.getEntityId()).findUnique();
-		}
-		catch (PersistenceException e) {
-			data = null;
-		}
-		if (data != null) {
-			minecart.teleport(data.getMinecartLocation());
-			return;
-		}
-		
 		ArrayList<com.afforess.minecartmaniacore.signs.Sign> list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 2);
 		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
 			sign.executeActions(minecart);
@@ -111,7 +93,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 	public void onMinecartTimeEvent(MinecartTimeEvent event) {
 		MinecartManiaMinecart minecart = event.getMinecart();
 		HoldSignData data = (HoldSignData)minecart.getDataValue("hold sign data");
-		if (data == null) {
+		/*if (data == null) {
 			try {
 				data = MinecartManiaSignCommands.instance.getDatabase().find(HoldSignData.class).where().idEq(minecart.minecart.getEntityId()).findUnique();
 			}
@@ -119,7 +101,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 				List<HoldSignData> list = MinecartManiaSignCommands.instance.getDatabase().find(HoldSignData.class).where().idEq(minecart.minecart.getEntityId()).findList();
 				MinecartManiaSignCommands.instance.getDatabase().delete(list);
 			}
-		}
+		}*/
 		if (data != null) {
 			data.setTime(data.getTime() - 1);
 			com.afforess.minecartmaniacore.signs.Sign sign = SignManager.getSignAt(data.getSignLocation());
@@ -143,11 +125,11 @@ public class MinecartActionListener extends MinecartManiaListener{
 				minecart.minecart.setVelocity(data.getMotion());
 				minecart.setDataValue("hold sign data", null);
 				minecart.setDataValue("HoldForDelay", null);
-				MinecartManiaSignCommands.instance.getDatabase().delete(data);
+				//MinecartManiaSignCommands.instance.getDatabase().delete(data);
 			}
 			else {
 				minecart.setDataValue("hold sign data", data);
-				MinecartManiaSignCommands.instance.getDatabase().update(data);
+				//MinecartManiaSignCommands.instance.getDatabase().update(data);
 			}
 		}
 	}
