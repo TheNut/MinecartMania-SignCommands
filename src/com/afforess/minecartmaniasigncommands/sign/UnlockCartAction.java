@@ -5,8 +5,9 @@ import com.afforess.minecartmaniacore.config.LocaleParser;
 import com.afforess.minecartmaniacore.signs.Sign;
 
 public class UnlockCartAction extends GenericAction{
+	public static final String name = "Unlock Cart";
 	public UnlockCartAction(Sign sign) {
-		super("Unlock Cart", "Lock Cart", null);
+		super(name, LockCartAction.name, null);
 	}
 	
 	@Override

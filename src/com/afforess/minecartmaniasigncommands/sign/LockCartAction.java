@@ -5,9 +5,10 @@ import com.afforess.minecartmaniacore.config.LocaleParser;
 import com.afforess.minecartmaniacore.signs.Sign;
 
 public class LockCartAction extends GenericAction{
+	public static final String name = "Lock Cart";
 
 	public LockCartAction(Sign sign) {
-		super("Lock Cart");
+		super(name);
 	}
 	
 	@Override
@@ -18,6 +19,17 @@ public class LockCartAction extends GenericAction{
 			}
 		}
 		return super.execute(minecart);
+	}
+	
+	@Override
+	public boolean valid(Sign sign) {
+		for (String line : sign.getLines()) {
+			if (line.toLowerCase().contains(name.toLowerCase()) && !line.toLowerCase().contains(UnlockCartAction.name.toLowerCase())) {
+				sign.addBrackets();
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
