@@ -41,7 +41,7 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 		server = this.getServer();
 		description = this.getDescription();
 		instance = this;
-		MinecartManiaConfigurationParser.read(description.getName() + "Configuration.xml", MinecartManiaCore.dataDirectory, new SignCommandsSettingParser());
+		MinecartManiaConfigurationParser.read(description.getName() + "Configuration.xml", MinecartManiaCore.getDataDirectoryRelativePath(), new SignCommandsSettingParser());
 		getServer().getPluginManager().registerEvent(Event.Type.CUSTOM_EVENT, listener, Priority.Low, this);
 		getServer().getPluginManager().registerEvent(Event.Type.VEHICLE_ENTER, vehicleListener, Priority.Monitor, this);
 		getServer().getPluginManager().registerEvent(Event.Type.VEHICLE_EXIT, vehicleListener, Priority.Monitor, this);
@@ -65,7 +65,7 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 			}
 		}
 		
-		File oldSensorData = new File(MinecartManiaCore.dataDirectory, "Sensors.data");
+		File oldSensorData = new File(MinecartManiaCore.getDataDirectoryRelativePath(), "Sensors.data");
 		if (oldSensorData.exists()) {
 			oldSensorData.delete();
 		}

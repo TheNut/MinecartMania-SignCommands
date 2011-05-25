@@ -10,13 +10,18 @@ public class SetStationAction implements SignAction{
 	protected String station = null;
 	public SetStationAction(Sign sign) {
 		
-		for (String line : sign.getLines()) {
+		for (int i = 0; i < sign.getNumLines(); i++) {
+			String line = sign.getLine(i);
 			if (line.toLowerCase().contains("[station")) {
-				String val[] = line.toLowerCase().split(":");
+				String val[] = line.split(":");
 				if (val.length != 2) {
 					continue;
 				}
 				station = StringUtils.removeBrackets(val[1].trim());
+				//check following lines
+				while (++i < sign.getNumLines() && sign.getLine(i).startsWith("-")) {
+					station += StringUtils.removeBrackets(sign.getLine(i).substring(1));
+				}
 				break;
 			}
 		}

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -85,7 +86,7 @@ public abstract class GenericSensor implements Sensor {
 				}
 			}
 		};
-		MinecartManiaCore.server.getScheduler().scheduleSyncDelayedTask(MinecartManiaCore.instance, task, (Integer)MinecartManiaWorld.getConfigurationValue("SensorDisabledDelay"));
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(MinecartManiaCore.getInstance(), task, (Integer)MinecartManiaWorld.getConfigurationValue("SensorDisabledDelay"));
 	}
 	
 	private void disable() {
