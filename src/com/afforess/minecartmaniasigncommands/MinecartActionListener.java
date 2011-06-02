@@ -28,13 +28,19 @@ import com.afforess.minecartmaniasigncommands.sign.SignType;
 
 public class MinecartActionListener extends MinecartManiaListener{
 
+	//Test 1
 	public void onMinecartActionEvent(MinecartActionEvent event) {
-		MinecartManiaMinecart minecart = event.getMinecart();
+		final MinecartManiaMinecart minecart = event.getMinecart();
 		ArrayList<com.afforess.minecartmaniacore.signs.Sign> list = SignUtils.getAdjacentMinecartManiaSignList(minecart.getLocation(), 2);
 		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
 			sign.executeActions(minecart);
 		}
-		SignCommands.updateSensors(minecart);
+		(new Thread() {
+			public void run() {
+				SignCommands.updateSensors(minecart);
+			}
+		}).start();
+		
 	}
 	
 	public void onMinecartPassengerEjectEvent(MinecartPassengerEjectEvent event) {

@@ -31,7 +31,6 @@ public class SignCommands {
 					SensorManager.delSensor(s.getLocation());
 				}
 			}
-			
 		}
 		
 		//deactivate old sensors

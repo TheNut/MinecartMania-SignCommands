@@ -1,6 +1,8 @@
 package com.afforess.minecartmaniasigncommands.sensor;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -10,6 +12,7 @@ import com.afforess.minecartmaniasigncommands.MinecartManiaSignCommands;
 public class SensorManager {
 	//Maintain a list of active sensors. Saved on server shutdown.
 	private static final ConcurrentHashMap<Location, Sensor> sensors = new ConcurrentHashMap<Location, Sensor>();
+	private static Lock sensorLock = new ReentrantLock();
 
 	public static Sensor getSensor(Location loc) {
 		//First check and see if this is an active sensor
@@ -27,24 +30,31 @@ public class SensorManager {
 			}
 		}
 		else {
-			SensorDataTable data = MinecartManiaSignCommands.instance.getDatabase().find(SensorDataTable.class).where()
-			.ieq("x", Integer.toString(loc.getBlockX())).ieq("y", Integer.toString(loc.getBlockY()))
-			.ieq("z", Integer.toString(loc.getBlockZ())).ieq("world", loc.getWorld().getName()).findUnique();
-			if (data != null) {
-				s = data.toSensor();
-				if (s != null) {
-					if (!(loc.getBlock().getState() instanceof Sign)) {
-						sensors.remove(loc);
-						deleteSensor(s);
-						s = null;
+			if (sensorLock.tryLock()) {
+				try {
+					SensorDataTable data = MinecartManiaSignCommands.instance.getDatabase().find(SensorDataTable.class).where()
+					.ieq("x", Integer.toString(loc.getBlockX())).ieq("y", Integer.toString(loc.getBlockY()))
+					.ieq("z", Integer.toString(loc.getBlockZ())).ieq("world", loc.getWorld().getName()).findUnique();
+					if (data != null) {
+						s = data.toSensor();
+						if (s != null) {
+							if (!(loc.getBlock().getState() instanceof Sign)) {
+								sensors.remove(loc);
+								deleteSensor(s);
+								s = null;
+							}
+							else if (!verifySensor((Sign)loc.getBlock().getState(), s)) {
+								sensors.remove(loc);
+								deleteSensor(s);
+								s = null;
+							}
+							sensors.put(loc, s);
+							return s;
+						}
 					}
-					else if (!verifySensor((Sign)loc.getBlock().getState(), s)) {
-						sensors.remove(loc);
-						deleteSensor(s);
-						s = null;
-					}
-					sensors.put(loc, s);
-					return s;
+				}
+				finally {
+					sensorLock.unlock();
 				}
 			}
 		}
