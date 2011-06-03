@@ -22,7 +22,7 @@ public class SignCommands {
 
 		//Activate new sensors
 		for (Block block : blockList) {
-			Sensor s = SensorManager.getSensor(block.getLocation());
+			Sensor s = SensorManager.getSensor(block);
 			if (s != null) {
 				try {
 					s.input(input);
@@ -35,7 +35,7 @@ public class SignCommands {
 		
 		//deactivate old sensors
 		for (Block block : oldBlockList) {
-			Sensor s = SensorManager.getSensor(block.getLocation());
+			Sensor s = SensorManager.getSensor(block);
 			if (s != null){
 				try {
 					s.input(null);

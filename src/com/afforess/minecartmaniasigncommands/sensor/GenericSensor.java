@@ -14,6 +14,7 @@ import org.bukkit.block.Sign;
 import com.afforess.minecartmaniacore.world.Item;
 import com.afforess.minecartmaniacore.MinecartManiaCore;
 import com.afforess.minecartmaniacore.world.MinecartManiaWorld;
+import com.afforess.minecartmaniacore.debug.MinecartManiaLogger;
 import com.afforess.minecartmaniacore.utils.DirectionUtils;
 
 
@@ -25,20 +26,22 @@ public abstract class GenericSensor implements Sensor {
 	protected String name;
 	protected boolean master = true;
 	protected SensorDataTable data = null;
+	protected ArrayList<GenericSensor> pairedSensors = null;
+	protected GenericSensor masterSensor = null;
 	
 	public GenericSensor(SensorType type, Sign sign, String name) {
 		this.type = type;
 		this.sign = sign.getBlock().getLocation();
 		this.name = name;
 		
-		ConcurrentHashMap<Location, Sensor> list = SensorManager.getSensorList();
-		Iterator<Entry<Location, Sensor>> i = list.entrySet().iterator();
+		ConcurrentHashMap<Block, Sensor> list = SensorManager.getSensorList();
+		Iterator<Entry<Block, Sensor>> i = list.entrySet().iterator();
 		while (i.hasNext()) {
-			Entry<Location, Sensor> e = i.next();
+			Entry<Block, Sensor> e = i.next();
 			if (!equals(e.getKey())) {
 				if (e.getValue().getName().equals(getName())) {
 					master = false;
-					break;
+					((GenericSensor)e.getValue()).clearCache();
 				}
 			}
 		}
@@ -57,7 +60,6 @@ public abstract class GenericSensor implements Sensor {
 			getMaster().setState(state, true);
 		}
 		else if (force) {
-			
 			if (isMaster()) {
 				ArrayList<GenericSensor> slaves = getSlaves();
 				for (GenericSensor sensor : slaves) {
@@ -126,39 +128,16 @@ public abstract class GenericSensor implements Sensor {
 	}
 	
 	private GenericSensor getMaster() {
-		ConcurrentHashMap<Location, Sensor> list = SensorManager.getSensorList();
-		Iterator<Entry<Location, Sensor>> i = list.entrySet().iterator();
-		while (i.hasNext()) {
-			Entry<Location, Sensor> e = i.next();
-			if (!equals(e.getKey())) {
-				if (e.getValue().getName().equals(getName()) && e.getValue().getType() == getType()) {
-					if (((GenericSensor)e.getValue()).isMaster()) {
-						return (GenericSensor)e.getValue();
-					}
-				}
-			}
-		}
-		if (!isMaster()) {
-			master = true;
-		}
-		return this;
+		checkCache();
+		return masterSensor;
 	}
 	
 	private ArrayList<GenericSensor> getSlaves() {
-		ArrayList<GenericSensor> slaves = new ArrayList<GenericSensor>();
 		if (isMaster() && !getName().isEmpty()) {
-			ConcurrentHashMap<Location, Sensor> list = SensorManager.getSensorList();
-			Iterator<Entry<Location, Sensor>> i = list.entrySet().iterator();
-			while (i.hasNext()) {
-				Entry<Location, Sensor> e = i.next();
-				if (!equals(e.getKey())) {
-					if (e.getValue().getName().equals(getName()) && e.getValue().getType() == getType()) {
-						slaves.add((GenericSensor) e.getValue());
-					}
-				}
-			}
+			checkCache();
+			return pairedSensors;
 		}
-		return slaves;
+		return new ArrayList<GenericSensor>();
 	}
 	
 	@Override
@@ -189,6 +168,20 @@ public abstract class GenericSensor implements Sensor {
 	public SensorType getType() {
 		return type;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Sensor) {
+			return equals(((Sensor)other).getLocation());
+		}
+		if (other instanceof Location) {
+			return equals((Location)other);
+		}
+		if (other instanceof Block) {
+			return equals(((Block)other).getLocation());
+		}
+		return false;
+	}
 
 	@Override
 	public boolean equals(Location location) {
@@ -212,5 +205,37 @@ public abstract class GenericSensor implements Sensor {
 			data = new SensorDataTable(sign, name, type, state, master);
 		}
 		return data;
+	}
+	
+	public void clearCache() {
+		pairedSensors = null;
+		MinecartManiaLogger.getInstance().debug("Sensor Cache Cleared");
+	}
+	
+	public void checkCache() {
+		if (pairedSensors == null) {
+			MinecartManiaLogger.getInstance().debug("Sensor Cache Re-Calculated");
+			boolean masterFound = false;
+			masterSensor = null;
+			pairedSensors = new ArrayList<GenericSensor>();
+			ConcurrentHashMap<Block, Sensor> list = SensorManager.getSensorList();
+			Iterator<Entry<Block, Sensor>> i = list.entrySet().iterator();
+			while (i.hasNext()) {
+				Entry<Block, Sensor> e = i.next();
+				if (!equals(e.getKey())) {
+					if (e.getValue().getName().equals(getName()) && e.getValue().getType() == getType()) {
+						pairedSensors.add((GenericSensor) e.getValue());
+						if (((GenericSensor)e.getValue()).isMaster()) {
+							masterFound = true;
+							masterSensor = (GenericSensor)e.getValue();
+						}
+					}
+				}
+			}
+			if (!masterFound) {
+				master = true;
+				masterSensor = this;
+			}
+		}
 	}
 }

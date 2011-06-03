@@ -10,7 +10,7 @@ import java.util.List;
 import javax.persistence.PersistenceException;
 
 import org.bukkit.Server;
-import org.bukkit.block.Sign;
+import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -74,8 +74,9 @@ public class MinecartManiaSignCommands extends JavaPlugin{
 		List<SensorDataTable> data = getDatabase().find(SensorDataTable.class).findList();
 		for (SensorDataTable temp : data) {
 			if (temp.hasValidLocation()) {
-				if (temp.getLocation().getBlock().getState() instanceof Sign) {
-					SensorManager.getSensor(temp.getLocation()); //force load of sensor
+				Block block = temp.getLocation().getBlock();
+				if (SensorManager.isSign(block)) {
+					SensorManager.getSensor(block, true); //force load of sensor
 					if (temp.getId() > maxId) {
 						maxId = temp.getId();
 					}

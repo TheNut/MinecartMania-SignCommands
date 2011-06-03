@@ -35,11 +35,7 @@ public class MinecartActionListener extends MinecartManiaListener{
 		for (com.afforess.minecartmaniacore.signs.Sign sign : list) {
 			sign.executeActions(minecart);
 		}
-		(new Thread() {
-			public void run() {
-				SignCommands.updateSensors(minecart);
-			}
-		}).start();
+		SignCommands.updateSensors(minecart);
 		
 	}
 	

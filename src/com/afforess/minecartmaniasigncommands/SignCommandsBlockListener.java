@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockListener;
@@ -44,11 +44,11 @@ public class SignCommandsBlockListener extends BlockListener{
     	}
     	//Forces diode not to update and disable itself 
     	if (event.getBlock().getTypeId() == Material.DIODE_BLOCK_ON.getId()) {
-    		ConcurrentHashMap<Location, Sensor> sensorList = SensorManager.getSensorList();
-			Iterator<Entry<Location, Sensor>> i = sensorList.entrySet().iterator();
+    		ConcurrentHashMap<Block, Sensor> sensorList = SensorManager.getSensorList();
+			Iterator<Entry<Block, Sensor>> i = sensorList.entrySet().iterator();
 			while(i.hasNext()) {
-				Entry<Location, Sensor> e = i.next();
-				if (e.getValue().getLocation().getBlock().getState() instanceof Sign && ((GenericSensor)e.getValue()).equals(event.getBlock().getLocation())) {
+				Entry<Block, Sensor> e = i.next();
+				if (SensorManager.isSign(e.getKey()) && ((GenericSensor)e.getValue()).equals(event.getBlock().getLocation())) {
 					event.setCancelled(true);
 					return;
 				}
