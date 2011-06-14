@@ -21,7 +21,7 @@ public class EjectionAction implements SignAction{
 		if (minecart.minecart.getPassenger() == null) {
 			return false;
 		}
-		if (!ControlBlockList.isValidEjectorBlock(minecart.getBlockBeneath())) {
+		if (!ControlBlockList.isValidEjectorBlock(minecart)) {
 			return false;
 		}
 		Location location = EntityUtils.getValidLocation(this.sign.getBlock());

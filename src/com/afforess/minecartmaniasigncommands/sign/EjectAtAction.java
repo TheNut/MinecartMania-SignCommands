@@ -27,7 +27,7 @@ public class EjectAtAction implements SignAction, FailureReason {
 		if (minecart.minecart.getPassenger() == null) {
 			return false;
 		}
-		if (!ControlBlockList.isValidEjectorBlock(minecart.getBlockBeneath())) {
+		if (!ControlBlockList.isValidEjectorBlock(minecart)) {
 			return false;
 		}
 		Entity passenger = minecart.minecart.getPassenger();
